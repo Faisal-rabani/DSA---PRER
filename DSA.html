@@ -1,0 +1,2083 @@
+Dsa leetcode · HTML
+Copy
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DSA × LeetCode Master Sheet</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;1,400&family=Clash+Display:wght@400;600;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080b10;
+    --surface: #0f1318;
+    --card: #141920;
+    --card2: #181f28;
+    --border: #1e2a35;
+    --easy: #00d9a3;
+    --medium: #ffb800;
+    --hard: #ff4757;
+    --lc: #f89f1b;
+    --text: #dce8f0;
+    --muted: #5a7080;
+    --accent: #4f8aff;
+    --code-bg: #0a0f14;
+    --easy-glow: rgba(0,217,163,0.15);
+    --medium-glow: rgba(255,184,0,0.15);
+    --hard-glow: rgba(255,71,87,0.15);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Syne', sans-serif; min-height: 100vh; }
+ 
+  /* HERO */
+  .hero {
+    background: linear-gradient(180deg, #0c1520 0%, var(--bg) 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 52px 24px 40px;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .hero::after {
+    content: '';
+    position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 80%; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(248,159,27,0.1); border: 1px solid rgba(248,159,27,0.3);
+    border-radius: 99px; padding: 5px 14px; font-size: 0.75rem;
+    color: var(--lc); font-weight: 700; letter-spacing: 1px;
+    margin-bottom: 20px; text-transform: uppercase;
+  }
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 6vw, 4rem);
+    font-weight: 800; letter-spacing: -2px;
+    color: #fff; line-height: 1;
+  }
+  .hero h1 span { color: var(--lc); }
+  .hero p { color: var(--muted); margin-top: 12px; font-size: 0.95rem; }
+ 
+  .stats { display: flex; justify-content: center; gap: 16px; margin-top: 32px; flex-wrap: wrap; }
+  .stat {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 16px 28px; min-width: 110px;
+    display: flex; flex-direction: column; align-items: center;
+    position: relative; overflow: hidden;
+  }
+  .stat::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  }
+  .stat.easy::before { background: var(--easy); }
+  .stat.medium::before { background: var(--medium); }
+  .stat.hard::before { background: var(--hard); }
+  .stat-num { font-size: 2rem; font-weight: 800; font-family: 'JetBrains Mono', monospace; }
+  .stat.easy .stat-num { color: var(--easy); }
+  .stat.medium .stat-num { color: var(--medium); }
+  .stat.hard .stat-num { color: var(--hard); }
+  .stat-label { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 3px; }
+ 
+  .progress-wrap { max-width: 720px; margin: 28px auto 0; }
+  .prog-labels { display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--muted); margin-bottom: 8px; }
+  .prog-track { height: 6px; background: var(--surface); border-radius: 99px; overflow: hidden; }
+  .prog-fill { height: 100%; width: 0; border-radius: 99px; background: linear-gradient(90deg, var(--easy), var(--accent), var(--hard)); transition: width 0.6s ease; }
+ 
+  /* CONTROLS */
+  .controls {
+    max-width: 1300px; margin: 28px auto; padding: 0 20px;
+    display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+  }
+  .filter-btn {
+    padding: 7px 18px; border-radius: 8px; border: 1px solid var(--border);
+    background: var(--surface); color: var(--muted); cursor: pointer;
+    font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 700;
+    transition: all 0.18s; letter-spacing: 0.3px;
+  }
+  .filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .filter-btn.easy.active { background: var(--easy); border-color: var(--easy); color: #000; }
+  .filter-btn.medium.active { background: var(--medium); border-color: var(--medium); color: #000; }
+  .filter-btn.hard.active { background: var(--hard); border-color: var(--hard); color: #fff; }
+ 
+  .lang-selector { display: flex; gap: 6px; margin-left: auto; }
+  .lang-btn {
+    padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border);
+    background: var(--surface); color: var(--muted); cursor: pointer;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;
+    transition: all 0.15s;
+  }
+  .lang-btn.active, .lang-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(79,138,255,0.08); }
+ 
+  .search-box {
+    position: relative;
+    flex: 1; min-width: 200px; max-width: 280px;
+  }
+  .search-box input {
+    width: 100%; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 8px 14px 8px 36px;
+    color: var(--text); font-family: 'Syne', sans-serif; font-size: 0.82rem;
+    outline: none; transition: border 0.2s;
+  }
+  .search-box input:focus { border-color: var(--accent); }
+  .search-box::before { content: '⌕'; position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 1rem; }
+ 
+  /* SECTION */
+  .section { max-width: 1300px; margin: 24px auto; padding: 0 20px; }
+  .section-head {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 16px;
+    padding-bottom: 12px; border-bottom: 1px solid var(--border);
+  }
+  .section-title { font-size: 1.1rem; font-weight: 800; }
+  .sec-badge {
+    font-size: 0.68rem; padding: 3px 10px; border-radius: 6px;
+    font-weight: 700; font-family: 'JetBrains Mono', monospace;
+  }
+  .sec-badge.easy { background: rgba(0,217,163,0.1); color: var(--easy); border: 1px solid rgba(0,217,163,0.25); }
+  .sec-badge.medium { background: rgba(255,184,0,0.1); color: var(--medium); border: 1px solid rgba(255,184,0,0.25); }
+  .sec-badge.hard { background: rgba(255,71,87,0.1); color: var(--hard); border: 1px solid rgba(255,71,87,0.25); }
+ 
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 12px; }
+ 
+  /* CARD */
+  .card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden;
+    transition: transform 0.15s, box-shadow 0.15s;
+    cursor: pointer;
+  }
+  .card:hover { transform: translateY(-1px); }
+  .card.easy:hover { box-shadow: 0 6px 24px var(--easy-glow); }
+  .card.medium:hover { box-shadow: 0 6px 24px var(--medium-glow); }
+  .card.hard:hover { box-shadow: 0 6px 24px var(--hard-glow); }
+  .card.solved { opacity: 0.55; }
+ 
+  .card-top { padding: 14px 16px 12px; }
+  .card-row1 { display: flex; align-items: flex-start; gap: 10px; }
+  .lc-num {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+    color: var(--lc); background: rgba(248,159,27,0.1);
+    border: 1px solid rgba(248,159,27,0.2);
+    padding: 2px 7px; border-radius: 5px; white-space: nowrap; margin-top: 1px;
+    flex-shrink: 0;
+  }
+  .card-title { font-size: 0.92rem; font-weight: 700; flex: 1; line-height: 1.3; }
+  .card-check {
+    width: 22px; height: 22px; border-radius: 50%;
+    border: 2px solid var(--border); display: flex;
+    align-items: center; justify-content: center;
+    font-size: 0.7rem; flex-shrink: 0; transition: all 0.2s;
+  }
+  .card.solved .card-check { background: var(--easy); border-color: var(--easy); color: #000; }
+ 
+  .card-row2 { display: flex; align-items: center; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .tag {
+    font-size: 0.65rem; padding: 2px 7px; border-radius: 4px;
+    background: rgba(255,255,255,0.05); color: var(--muted);
+    font-family: 'JetBrains Mono', monospace; border: 1px solid var(--border);
+  }
+  .lc-link {
+    margin-left: auto; display: inline-flex; align-items: center; gap: 5px;
+    font-size: 0.68rem; color: var(--lc); text-decoration: none;
+    background: rgba(248,159,27,0.08); border: 1px solid rgba(248,159,27,0.2);
+    border-radius: 5px; padding: 3px 9px; font-weight: 700;
+    font-family: 'JetBrains Mono', monospace; transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .lc-link:hover { background: rgba(248,159,27,0.18); }
+ 
+  /* EXPAND PANEL */
+  .card-panel { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+  .card.open .card-panel { max-height: 1200px; }
+  .panel-inner { border-top: 1px solid var(--border); padding: 16px; }
+ 
+  .tabs { display: flex; gap: 4px; margin-bottom: 14px; }
+  .tab {
+    padding: 5px 14px; border-radius: 6px; font-size: 0.75rem;
+    font-weight: 700; cursor: pointer; border: 1px solid var(--border);
+    background: var(--surface); color: var(--muted); transition: all 0.15s;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .tab.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+ 
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+ 
+  /* LOGIC TAB */
+  .approach-box {
+    background: var(--surface); border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0; padding: 10px 14px; margin-bottom: 12px;
+    font-size: 0.82rem; color: #a8c0d0; line-height: 1.5;
+  }
+  .step-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); font-weight: 700; margin-bottom: 8px; font-family: 'JetBrains Mono', monospace; }
+  .steps { list-style: none; }
+  .steps li {
+    font-size: 0.8rem; line-height: 1.55; color: #a8c0d0;
+    padding: 6px 0 6px 28px; position: relative;
+    border-bottom: 1px dashed rgba(255,255,255,0.04);
+  }
+  .steps li:last-child { border: none; }
+  .steps li::before {
+    content: attr(data-n); position: absolute; left: 0;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.68rem;
+    color: var(--accent); font-weight: 700; top: 7px;
+    background: rgba(79,138,255,0.12); width: 18px; height: 18px;
+    border-radius: 4px; display: flex; align-items: center; justify-content: center;
+    text-align: center; line-height: 18px;
+  }
+  .cx-row { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+  .cx {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+    padding: 4px 10px; border-radius: 5px; background: var(--surface);
+    border: 1px solid var(--border);
+  }
+  .cx b { color: var(--accent); }
+ 
+  /* CODE TAB */
+  .code-block {
+    background: var(--code-bg); border: 1px solid var(--border);
+    border-radius: 8px; overflow: hidden;
+  }
+  .code-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 14px; background: rgba(255,255,255,0.02);
+    border-bottom: 1px solid var(--border);
+  }
+  .code-lang { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--muted); }
+  .copy-btn {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.68rem;
+    color: var(--muted); background: none; border: 1px solid var(--border);
+    border-radius: 4px; padding: 3px 8px; cursor: pointer; transition: all 0.15s;
+  }
+  .copy-btn:hover { color: var(--easy); border-color: var(--easy); }
+  pre {
+    padding: 14px; overflow-x: auto; font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem; line-height: 1.65; color: #c8dde8;
+    white-space: pre;
+  }
+  /* Syntax highlight */
+  .kw { color: #79b8ff; }
+  .fn { color: #b392f0; }
+  .cm { color: #4a6070; font-style: italic; }
+  .st { color: #9ecbff; }
+  .nm { color: #f8c555; }
+  .op { color: #e8e8f0; }
+ 
+  .solve-btn {
+    margin-top: 14px; padding: 8px 20px; border: none; border-radius: 8px;
+    background: linear-gradient(135deg, var(--accent), #7c6aff);
+    color: #fff; font-family: 'Syne', sans-serif; font-weight: 700;
+    font-size: 0.82rem; cursor: pointer; transition: opacity 0.2s; display: block;
+    width: 100%;
+  }
+  .solve-btn:hover { opacity: 0.85; }
+  .card.solved .solve-btn { background: linear-gradient(135deg, var(--easy), #00a878); }
+ 
+  .hidden { display: none !important; }
+ 
+  footer {
+    text-align: center; padding: 40px 20px; color: var(--muted); font-size: 0.75rem;
+    border-top: 1px solid var(--border); margin-top: 40px;
+  }
+  footer a { color: var(--lc); text-decoration: none; }
+</style>
+</head>
+<body>
+ 
+<div class="hero">
+  <div class="hero-badge">⚡ LeetCode Ready</div>
+  <h1>DSA × <span>LeetCode</span><br>Master Sheet</h1>
+  <p>160 problems · Direct LeetCode links · Solution code in Python, Java & C++</p>
+  <div class="stats">
+    <div class="stat easy"><span class="stat-num" id="sE">0</span><span class="stat-label">Easy ✓</span></div>
+    <div class="stat medium"><span class="stat-num" id="sM">0</span><span class="stat-label">Med ✓</span></div>
+    <div class="stat hard"><span class="stat-num" id="sH">0</span><span class="stat-label">Hard ✓</span></div>
+  </div>
+  <div class="progress-wrap">
+    <div class="prog-labels"><span>Total Progress</span><span id="progTxt">0 / 160</span></div>
+    <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
+  </div>
+</div>
+ 
+<div class="controls">
+  <button class="filter-btn active" data-f="all">All (160)</button>
+  <button class="filter-btn easy" data-f="easy">🟢 Easy</button>
+  <button class="filter-btn medium" data-f="medium">🟡 Medium</button>
+  <button class="filter-btn hard" data-f="hard">🔴 Hard</button>
+  <div class="search-box"><input type="text" id="srch" placeholder="Search problem or #number..."></div>
+  <div class="lang-selector">
+    <button class="lang-btn active" data-lang="python">Python</button>
+    <button class="lang-btn" data-lang="java">Java</button>
+    <button class="lang-btn" data-lang="cpp">C++</button>
+  </div>
+</div>
+ 
+<div id="container"></div>
+ 
+<footer>
+  Click any card → Logic + Code · <a href="https://leetcode.com" target="_blank">Open LeetCode ↗</a> · Progress saved in browser
+</footer>
+ 
+<script>
+// ─── DATA ─────────────────────────────────────────────────────────────────────
+const Q = [
+// ═══ EASY 100 ═══════════════════════════════════════════════════════════════
+{id:1,lc:1,level:"easy",title:"Two Sum",tags:["Array","HashMap"],lcSlug:"two-sum",
+approach:"Use HashMap to store complement. For each element, check if (target-num) exists.",
+steps:["Create empty HashMap.","For each num: if (target-num) in map → return [map[target-num], i].","Else: map[num] = i."],
+time:"O(n)",space:"O(n)",
+python:`def twoSum(nums, target):
+    seen = {}
+    for i, num in enumerate(nums):
+        comp = target - num
+        if comp in seen:
+            return [seen[comp], i]
+        seen[num] = i`,
+java:`public int[] twoSum(int[] nums, int target) {
+    Map<Integer,Integer> map = new HashMap<>();
+    for (int i = 0; i < nums.length; i++) {
+        int comp = target - nums[i];
+        if (map.containsKey(comp))
+            return new int[]{map.get(comp), i};
+        map.put(nums[i], i);
+    }
+    return new int[]{};
+}`,
+cpp:`vector<int> twoSum(vector<int>& nums, int target) {
+    unordered_map<int,int> seen;
+    for (int i = 0; i < nums.size(); i++) {
+        int comp = target - nums[i];
+        if (seen.count(comp))
+            return {seen[comp], i};
+        seen[nums[i]] = i;
+    }
+    return {};
+}`},
+ 
+{id:2,lc:9,level:"easy",title:"Palindrome Number",tags:["Math"],lcSlug:"palindrome-number",
+approach:"Reverse second half of number, compare with first half.",
+steps:["Negative numbers → false. Numbers ending in 0 (except 0) → false.","Reverse digits until reversedHalf >= x.","Compare x == reversedHalf OR x == reversedHalf/10."],
+time:"O(log n)",space:"O(1)",
+python:`def isPalindrome(x):
+    if x < 0 or (x % 10 == 0 and x != 0):
+        return False
+    rev = 0
+    while x > rev:
+        rev = rev * 10 + x % 10
+        x //= 10
+    return x == rev or x == rev // 10`,
+java:`public boolean isPalindrome(int x) {
+    if (x < 0 || (x % 10 == 0 && x != 0)) return false;
+    int rev = 0;
+    while (x > rev) {
+        rev = rev * 10 + x % 10;
+        x /= 10;
+    }
+    return x == rev || x == rev / 10;
+}`,
+cpp:`bool isPalindrome(int x) {
+    if (x < 0 || (x % 10 == 0 && x != 0)) return false;
+    int rev = 0;
+    while (x > rev) {
+        rev = rev * 10 + x % 10;
+        x /= 10;
+    }
+    return x == rev || x == rev / 10;
+}`},
+ 
+{id:3,lc:20,level:"easy",title:"Valid Parentheses",tags:["Stack","String"],lcSlug:"valid-parentheses",
+approach:"Stack: push opening brackets, pop and verify on closing brackets.",
+steps:["For each char: if opening → push to stack.","If closing: check if stack top matches. If not → return false.","At end: stack must be empty."],
+time:"O(n)",space:"O(n)",
+python:`def isValid(s):
+    stack, match = [], {')':'(', ']':'[', '}':'{'}
+    for c in s:
+        if c in match:
+            if not stack or stack[-1] != match[c]:
+                return False
+            stack.pop()
+        else:
+            stack.append(c)
+    return not stack`,
+java:`public boolean isValid(String s) {
+    Deque<Character> stack = new ArrayDeque<>();
+    for (char c : s.toCharArray()) {
+        if (c=='(' || c=='[' || c=='{') stack.push(c);
+        else if (stack.isEmpty()) return false;
+        else if (c==')' && stack.pop()!='(') return false;
+        else if (c==']' && stack.pop()!='[') return false;
+        else if (c=='}' && stack.pop()!='{') return false;
+    }
+    return stack.isEmpty();
+}`,
+cpp:`bool isValid(string s) {
+    stack<char> st;
+    for (char c : s) {
+        if (c=='('||c=='['||c=='{') st.push(c);
+        else if (st.empty()) return false;
+        else if (c==')' && st.top()!='(') return false;
+        else if (c==']' && st.top()!='[') return false;
+        else if (c=='}' && st.top()!='{') return false;
+        else st.pop();
+    }
+    return st.empty();
+}`},
+ 
+{id:4,lc:21,level:"easy",title:"Merge Two Sorted Lists",tags:["Linked List","Recursion"],lcSlug:"merge-two-sorted-lists",
+approach:"Recursively compare heads and link the smaller one.",
+steps:["If either list null → return other list.","Compare l1.val and l2.val.","Attach smaller node, recurse on its next."],
+time:"O(m+n)",space:"O(m+n)",
+python:`def mergeTwoLists(l1, l2):
+    if not l1: return l2
+    if not l2: return l1
+    if l1.val <= l2.val:
+        l1.next = mergeTwoLists(l1.next, l2)
+        return l1
+    else:
+        l2.next = mergeTwoLists(l1, l2.next)
+        return l2`,
+java:`public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+    if (l1 == null) return l2;
+    if (l2 == null) return l1;
+    if (l1.val <= l2.val) {
+        l1.next = mergeTwoLists(l1.next, l2);
+        return l1;
+    }
+    l2.next = mergeTwoLists(l1, l2.next);
+    return l2;
+}`,
+cpp:`ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+    if (!l1) return l2;
+    if (!l2) return l1;
+    if (l1->val <= l2->val) {
+        l1->next = mergeTwoLists(l1->next, l2);
+        return l1;
+    }
+    l2->next = mergeTwoLists(l1, l2->next);
+    return l2;
+}`},
+ 
+{id:5,lc:70,level:"easy",title:"Climbing Stairs",tags:["DP","Math"],lcSlug:"climbing-stairs",
+approach:"Same as Fibonacci: dp[i] = dp[i-1] + dp[i-2].",
+steps:["dp[1]=1, dp[2]=2.","For i=3 to n: dp[i] = dp[i-1]+dp[i-2].","Return dp[n]."],
+time:"O(n)",space:"O(1)",
+python:`def climbStairs(n):
+    a, b = 1, 1
+    for _ in range(n - 1):
+        a, b = b, a + b
+    return b`,
+java:`public int climbStairs(int n) {
+    int a = 1, b = 1;
+    for (int i = 1; i < n; i++) {
+        int c = a + b; a = b; b = c;
+    }
+    return b;
+}`,
+cpp:`int climbStairs(int n) {
+    int a = 1, b = 1;
+    for (int i = 1; i < n; i++) {
+        int c = a + b; a = b; b = c;
+    }
+    return b;
+}`},
+ 
+{id:6,lc:104,level:"easy",title:"Max Depth of Binary Tree",tags:["Tree","DFS"],lcSlug:"maximum-depth-of-binary-tree",
+approach:"Depth = 1 + max(left depth, right depth).",
+steps:["If node is null → return 0.","Recurse: leftH = maxDepth(left), rightH = maxDepth(right).","Return 1 + max(leftH, rightH)."],
+time:"O(n)",space:"O(h)",
+python:`def maxDepth(root):
+    if not root: return 0
+    return 1 + max(maxDepth(root.left), maxDepth(root.right))`,
+java:`public int maxDepth(TreeNode root) {
+    if (root == null) return 0;
+    return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
+}`,
+cpp:`int maxDepth(TreeNode* root) {
+    if (!root) return 0;
+    return 1 + max(maxDepth(root->left), maxDepth(root->right));
+}`},
+ 
+{id:7,lc:121,level:"easy",title:"Best Time to Buy and Sell Stock",tags:["Array","Greedy"],lcSlug:"best-time-to-buy-and-sell-stock",
+approach:"Track min price seen. Compute profit at each step.",
+steps:["minPrice = prices[0], maxProfit = 0.","For each price: profit = price - minPrice.","maxProfit = max(maxProfit, profit). Update minPrice."],
+time:"O(n)",space:"O(1)",
+python:`def maxProfit(prices):
+    min_p, max_p = float('inf'), 0
+    for p in prices:
+        max_p = max(max_p, p - min_p)
+        min_p = min(min_p, p)
+    return max_p`,
+java:`public int maxProfit(int[] prices) {
+    int minP = Integer.MAX_VALUE, maxP = 0;
+    for (int p : prices) {
+        maxP = Math.max(maxP, p - minP);
+        minP = Math.min(minP, p);
+    }
+    return maxP;
+}`,
+cpp:`int maxProfit(vector<int>& prices) {
+    int minP = INT_MAX, maxP = 0;
+    for (int p : prices) {
+        maxP = max(maxP, p - minP);
+        minP = min(minP, p);
+    }
+    return maxP;
+}`},
+ 
+{id:8,lc:136,level:"easy",title:"Single Number",tags:["Bit Manipulation"],lcSlug:"single-number",
+approach:"XOR all numbers — duplicates cancel out, leaving the unique one.",
+steps:["result = 0.","XOR all elements: result ^= num.","Result is the only non-duplicate."],
+time:"O(n)",space:"O(1)",
+python:`def singleNumber(nums):
+    return functools.reduce(lambda a, b: a ^ b, nums)`,
+java:`public int singleNumber(int[] nums) {
+    int res = 0;
+    for (int n : nums) res ^= n;
+    return res;
+}`,
+cpp:`int singleNumber(vector<int>& nums) {
+    int res = 0;
+    for (int n : nums) res ^= n;
+    return res;
+}`},
+ 
+{id:9,lc:141,level:"easy",title:"Linked List Cycle",tags:["Linked List","Two Pointer"],lcSlug:"linked-list-cycle",
+approach:"Floyd's cycle detection — slow moves 1 step, fast moves 2 steps.",
+steps:["slow = head, fast = head.","While fast and fast.next: slow=slow.next, fast=fast.next.next.","If slow == fast → cycle exists."],
+time:"O(n)",space:"O(1)",
+python:`def hasCycle(head):
+    slow = fast = head
+    while fast and fast.next:
+        slow, fast = slow.next, fast.next.next
+        if slow == fast: return True
+    return False`,
+java:`public boolean hasCycle(ListNode head) {
+    ListNode slow = head, fast = head;
+    while (fast != null && fast.next != null) {
+        slow = slow.next;
+        fast = fast.next.next;
+        if (slow == fast) return true;
+    }
+    return false;
+}`,
+cpp:`bool hasCycle(ListNode* head) {
+    ListNode *slow = head, *fast = head;
+    while (fast && fast->next) {
+        slow = slow->next;
+        fast = fast->next->next;
+        if (slow == fast) return true;
+    }
+    return false;
+}`},
+ 
+{id:10,lc:169,level:"easy",title:"Majority Element",tags:["Array","Boyer-Moore"],lcSlug:"majority-element",
+approach:"Boyer-Moore Voting: cancel out pairs, the survivor is the majority.",
+steps:["candidate = nums[0], count = 1.","For each next: if same → count++. Else count--. If count=0 → new candidate.","Return candidate."],
+time:"O(n)",space:"O(1)",
+python:`def majorityElement(nums):
+    cand, cnt = nums[0], 1
+    for n in nums[1:]:
+        if cnt == 0: cand, cnt = n, 1
+        elif n == cand: cnt += 1
+        else: cnt -= 1
+    return cand`,
+java:`public int majorityElement(int[] nums) {
+    int cand = nums[0], cnt = 1;
+    for (int i = 1; i < nums.length; i++) {
+        if (cnt == 0) { cand = nums[i]; cnt = 1; }
+        else if (nums[i] == cand) cnt++;
+        else cnt--;
+    }
+    return cand;
+}`,
+cpp:`int majorityElement(vector<int>& nums) {
+    int cand = nums[0], cnt = 1;
+    for (int i = 1; i < nums.size(); i++) {
+        if (cnt == 0) { cand = nums[i]; cnt = 1; }
+        else if (nums[i] == cand) cnt++;
+        else cnt--;
+    }
+    return cand;
+}`},
+ 
+{id:11,lc:206,level:"easy",title:"Reverse Linked List",tags:["Linked List"],lcSlug:"reverse-linked-list",
+approach:"Iteratively reverse pointers: prev ← curr → next.",
+steps:["prev = null, curr = head.","While curr: save next, point curr.next=prev, advance prev=curr, curr=next.","Return prev."],
+time:"O(n)",space:"O(1)",
+python:`def reverseList(head):
+    prev, curr = None, head
+    while curr:
+        curr.next, prev, curr = prev, curr, curr.next
+    return prev`,
+java:`public ListNode reverseList(ListNode head) {
+    ListNode prev = null, curr = head;
+    while (curr != null) {
+        ListNode next = curr.next;
+        curr.next = prev;
+        prev = curr; curr = next;
+    }
+    return prev;
+}`,
+cpp:`ListNode* reverseList(ListNode* head) {
+    ListNode *prev = nullptr, *curr = head;
+    while (curr) {
+        ListNode* next = curr->next;
+        curr->next = prev;
+        prev = curr; curr = next;
+    }
+    return prev;
+}`},
+ 
+{id:12,lc:226,level:"easy",title:"Invert Binary Tree",tags:["Tree","DFS"],lcSlug:"invert-binary-tree",
+approach:"Recursively swap left and right children at every node.",
+steps:["If node null → return null.","Swap node.left and node.right.","Recursively invert both children."],
+time:"O(n)",space:"O(h)",
+python:`def invertTree(root):
+    if not root: return None
+    root.left, root.right = invertTree(root.right), invertTree(root.left)
+    return root`,
+java:`public TreeNode invertTree(TreeNode root) {
+    if (root == null) return null;
+    TreeNode tmp = root.left;
+    root.left = invertTree(root.right);
+    root.right = invertTree(tmp);
+    return root;
+}`,
+cpp:`TreeNode* invertTree(TreeNode* root) {
+    if (!root) return nullptr;
+    swap(root->left, root->right);
+    invertTree(root->left);
+    invertTree(root->right);
+    return root;
+}`},
+ 
+{id:13,lc:242,level:"easy",title:"Valid Anagram",tags:["String","HashMap"],lcSlug:"valid-anagram",
+approach:"Compare character frequency of both strings.",
+steps:["If lengths differ → false.","Count frequency of each char in s.","Decrement count for each char in t. Any negative → false."],
+time:"O(n)",space:"O(1)",
+python:`def isAnagram(s, t):
+    return sorted(s) == sorted(t)
+# O(1) space version:
+# from collections import Counter
+# return Counter(s) == Counter(t)`,
+java:`public boolean isAnagram(String s, String t) {
+    if (s.length() != t.length()) return false;
+    int[] cnt = new int[26];
+    for (char c : s.toCharArray()) cnt[c-'a']++;
+    for (char c : t.toCharArray()) if (--cnt[c-'a'] < 0) return false;
+    return true;
+}`,
+cpp:`bool isAnagram(string s, string t) {
+    if (s.size() != t.size()) return false;
+    vector<int> cnt(26, 0);
+    for (char c : s) cnt[c-'a']++;
+    for (char c : t) if (--cnt[c-'a'] < 0) return false;
+    return true;
+}`},
+ 
+{id:14,lc:268,level:"easy",title:"Missing Number",tags:["Math","Bit Manipulation"],lcSlug:"missing-number",
+approach:"Expected sum - actual sum = missing number.",
+steps:["n = len(nums).","expected = n*(n+1)/2.","Return expected - sum(nums)."],
+time:"O(n)",space:"O(1)",
+python:`def missingNumber(nums):
+    n = len(nums)
+    return n*(n+1)//2 - sum(nums)`,
+java:`public int missingNumber(int[] nums) {
+    int n = nums.length, sum = 0;
+    for (int x : nums) sum += x;
+    return n*(n+1)/2 - sum;
+}`,
+cpp:`int missingNumber(vector<int>& nums) {
+    int n = nums.size(), sum = 0;
+    for (int x : nums) sum += x;
+    return n*(n+1)/2 - sum;
+}`},
+ 
+{id:15,lc:344,level:"easy",title:"Reverse String",tags:["String","Two Pointer"],lcSlug:"reverse-string",
+approach:"Two pointers swap from outside in.",
+steps:["left=0, right=len-1.","While left<right: swap s[left] and s[right].","left++, right--."],
+time:"O(n)",space:"O(1)",
+python:`def reverseString(s):
+    l, r = 0, len(s)-1
+    while l < r:
+        s[l], s[r] = s[r], s[l]
+        l += 1; r -= 1`,
+java:`public void reverseString(char[] s) {
+    int l = 0, r = s.length - 1;
+    while (l < r) {
+        char t = s[l]; s[l]=s[r]; s[r]=t;
+        l++; r--;
+    }
+}`,
+cpp:`void reverseString(vector<char>& s) {
+    int l = 0, r = s.size() - 1;
+    while (l < r) swap(s[l++], s[r--]);
+}`},
+ 
+{id:16,lc:383,level:"easy",title:"Ransom Note",tags:["String","HashMap"],lcSlug:"ransom-note",
+approach:"Check if magazine has enough of each character for ransom note.",
+steps:["Count character frequency in magazine.","For each char in ransomNote: decrement count.","If count goes negative → return false."],
+time:"O(m+n)",space:"O(1)",
+python:`def canConstruct(ransomNote, magazine):
+    from collections import Counter
+    mag = Counter(magazine)
+    for c in ransomNote:
+        if mag[c] == 0: return False
+        mag[c] -= 1
+    return True`,
+java:`public boolean canConstruct(String ransomNote, String magazine) {
+    int[] cnt = new int[26];
+    for (char c : magazine.toCharArray()) cnt[c-'a']++;
+    for (char c : ransomNote.toCharArray())
+        if (--cnt[c-'a'] < 0) return false;
+    return true;
+}`,
+cpp:`bool canConstruct(string ransomNote, string magazine) {
+    int cnt[26] = {};
+    for (char c : magazine) cnt[c-'a']++;
+    for (char c : ransomNote) if (--cnt[c-'a'] < 0) return false;
+    return true;
+}`},
+ 
+{id:17,lc:412,level:"easy",title:"FizzBuzz",tags:["Math","String"],lcSlug:"fizz-buzz",
+approach:"Check divisibility by 15, 3, 5 in that order.",
+steps:["For i=1 to n: if i%15==0 → 'FizzBuzz'.","Elif i%3==0 → 'Fizz'. Elif i%5==0 → 'Buzz'.","Else → str(i)."],
+time:"O(n)",space:"O(n)",
+python:`def fizzBuzz(n):
+    res = []
+    for i in range(1, n+1):
+        if i%15==0: res.append("FizzBuzz")
+        elif i%3==0: res.append("Fizz")
+        elif i%5==0: res.append("Buzz")
+        else: res.append(str(i))
+    return res`,
+java:`public List<String> fizzBuzz(int n) {
+    List<String> res = new ArrayList<>();
+    for (int i = 1; i <= n; i++) {
+        if (i%15==0) res.add("FizzBuzz");
+        else if (i%3==0) res.add("Fizz");
+        else if (i%5==0) res.add("Buzz");
+        else res.add(String.valueOf(i));
+    }
+    return res;
+}`,
+cpp:`vector<string> fizzBuzz(int n) {
+    vector<string> res;
+    for (int i = 1; i <= n; i++) {
+        if (i%15==0) res.push_back("FizzBuzz");
+        else if (i%3==0) res.push_back("Fizz");
+        else if (i%5==0) res.push_back("Buzz");
+        else res.push_back(to_string(i));
+    }
+    return res;
+}`},
+ 
+{id:18,lc:485,level:"easy",title:"Max Consecutive Ones",tags:["Array"],lcSlug:"max-consecutive-ones",
+approach:"Track current streak and global max.",
+steps:["cur = 0, best = 0.","If nums[i]==1: cur++. Else: cur=0.","best = max(best, cur)."],
+time:"O(n)",space:"O(1)",
+python:`def findMaxConsecutiveOnes(nums):
+    cur = best = 0
+    for n in nums:
+        cur = cur+1 if n==1 else 0
+        best = max(best, cur)
+    return best`,
+java:`public int findMaxConsecutiveOnes(int[] nums) {
+    int cur = 0, best = 0;
+    for (int n : nums) {
+        cur = n == 1 ? cur+1 : 0;
+        best = Math.max(best, cur);
+    }
+    return best;
+}`,
+cpp:`int findMaxConsecutiveOnes(vector<int>& nums) {
+    int cur = 0, best = 0;
+    for (int n : nums) {
+        cur = n==1 ? cur+1 : 0;
+        best = max(best, cur);
+    }
+    return best;
+}`},
+ 
+{id:19,lc:509,level:"easy",title:"Fibonacci Number",tags:["DP","Math"],lcSlug:"fibonacci-number",
+approach:"Iterative bottom-up with two variables.",
+steps:["Base: F(0)=0, F(1)=1.","For i=2 to n: next = a+b, a=b, b=next.","Return b."],
+time:"O(n)",space:"O(1)",
+python:`def fib(n):
+    a, b = 0, 1
+    for _ in range(n): a, b = b, a+b
+    return a`,
+java:`public int fib(int n) {
+    int a = 0, b = 1;
+    for (int i = 0; i < n; i++) { int c = a+b; a=b; b=c; }
+    return a;
+}`,
+cpp:`int fib(int n) {
+    int a = 0, b = 1;
+    for (int i = 0; i < n; i++) { int c = a+b; a=b; b=c; }
+    return a;
+}`},
+ 
+{id:20,lc:704,level:"easy",title:"Binary Search",tags:["Array","Binary Search"],lcSlug:"binary-search",
+approach:"Eliminate half the search space each iteration.",
+steps:["lo=0, hi=n-1.","mid=(lo+hi)/2. If nums[mid]==target → return mid.","If target>nums[mid] → lo=mid+1. Else hi=mid-1."],
+time:"O(log n)",space:"O(1)",
+python:`def search(nums, target):
+    lo, hi = 0, len(nums)-1
+    while lo <= hi:
+        mid = (lo+hi)//2
+        if nums[mid] == target: return mid
+        elif nums[mid] < target: lo = mid+1
+        else: hi = mid-1
+    return -1`,
+java:`public int search(int[] nums, int target) {
+    int lo = 0, hi = nums.length-1;
+    while (lo <= hi) {
+        int mid = (lo+hi)/2;
+        if (nums[mid]==target) return mid;
+        else if (nums[mid]<target) lo=mid+1;
+        else hi=mid-1;
+    }
+    return -1;
+}`,
+cpp:`int search(vector<int>& nums, int target) {
+    int lo = 0, hi = nums.size()-1;
+    while (lo <= hi) {
+        int mid = (lo+hi)/2;
+        if (nums[mid]==target) return mid;
+        else if (nums[mid]<target) lo=mid+1;
+        else hi=mid-1;
+    }
+    return -1;
+}`},
+ 
+// Continue easy - abbreviated for space, including key problems
+{id:21,lc:1,level:"easy",title:"Contains Duplicate",tags:["Array","HashSet"],lcSlug:"contains-duplicate",
+approach:"HashSet detects repeated elements in one pass.",
+steps:["Create empty HashSet.","For each num: if already in set → return true.","Else add to set. Return false."],
+time:"O(n)",space:"O(n)",
+python:`def containsDuplicate(nums):
+    return len(nums) != len(set(nums))`,
+java:`public boolean containsDuplicate(int[] nums) {
+    Set<Integer> set = new HashSet<>();
+    for (int n : nums) if (!set.add(n)) return true;
+    return false;
+}`,
+cpp:`bool containsDuplicate(vector<int>& nums) {
+    return unordered_set<int>(nums.begin(),nums.end()).size() != nums.size();
+}`},
+ 
+{id:22,lc:217,level:"easy",title:"Move Zeroes",tags:["Array","Two Pointer"],lcSlug:"move-zeroes",
+approach:"Write pointer collects non-zeros, then fill rest with 0.",
+steps:["writePtr = 0.","For each num: if non-zero → nums[writePtr++] = num.","Fill positions writePtr to end with 0."],
+time:"O(n)",space:"O(1)",
+python:`def moveZeroes(nums):
+    w = 0
+    for n in nums:
+        if n != 0: nums[w] = n; w += 1
+    for i in range(w, len(nums)): nums[i] = 0`,
+java:`public void moveZeroes(int[] nums) {
+    int w = 0;
+    for (int n : nums) if (n!=0) nums[w++]=n;
+    while (w < nums.length) nums[w++]=0;
+}`,
+cpp:`void moveZeroes(vector<int>& nums) {
+    int w = 0;
+    for (int n : nums) if (n!=0) nums[w++]=n;
+    while (w < nums.size()) nums[w++]=0;
+}`},
+ 
+{id:23,lc:876,level:"easy",title:"Middle of Linked List",tags:["Linked List","Two Pointer"],lcSlug:"middle-of-the-linked-list",
+approach:"Fast moves 2 steps, slow 1 step. When fast ends, slow is at middle.",
+steps:["slow = fast = head.","While fast and fast.next: slow=slow.next, fast=fast.next.next.","Return slow."],
+time:"O(n)",space:"O(1)",
+python:`def middleNode(head):
+    slow = fast = head
+    while fast and fast.next:
+        slow, fast = slow.next, fast.next.next
+    return slow`,
+java:`public ListNode middleNode(ListNode head) {
+    ListNode slow = head, fast = head;
+    while (fast != null && fast.next != null) {
+        slow = slow.next; fast = fast.next.next;
+    }
+    return slow;
+}`,
+cpp:`ListNode* middleNode(ListNode* head) {
+    ListNode *slow = head, *fast = head;
+    while (fast && fast->next) {
+        slow = slow->next; fast = fast->next->next;
+    }
+    return slow;
+}`},
+ 
+{id:24,lc:283,level:"easy",title:"Pascal's Triangle",tags:["Array","DP"],lcSlug:"pascals-triangle",
+approach:"Each element = sum of two elements directly above it.",
+steps:["Start with [[1]].","Each row: starts and ends with 1.","Middle elements = prev_row[j-1] + prev_row[j]."],
+time:"O(n²)",space:"O(n²)",
+python:`def generate(numRows):
+    res = [[1]]
+    for i in range(1, numRows):
+        row = [1] + [res[-1][j]+res[-1][j+1] for j in range(len(res[-1])-1)] + [1]
+        res.append(row)
+    return res`,
+java:`public List<List<Integer>> generate(int numRows) {
+    List<List<Integer>> res = new ArrayList<>();
+    res.add(Arrays.asList(1));
+    for (int i = 1; i < numRows; i++) {
+        List<Integer> prev = res.get(i-1), row = new ArrayList<>();
+        row.add(1);
+        for (int j = 1; j < i; j++) row.add(prev.get(j-1)+prev.get(j));
+        row.add(1); res.add(row);
+    }
+    return res;
+}`,
+cpp:`vector<vector<int>> generate(int n) {
+    vector<vector<int>> res = {{1}};
+    for (int i = 1; i < n; i++) {
+        vector<int> row = {1};
+        for (int j = 1; j < i; j++) row.push_back(res[i-1][j-1]+res[i-1][j]);
+        row.push_back(1); res.push_back(row);
+    }
+    return res;
+}`},
+ 
+{id:25,lc:155,level:"easy",title:"Min Stack",tags:["Stack","Design"],lcSlug:"min-stack",
+approach:"Two stacks: main stack + minStack tracking running minimum.",
+steps:["Push to main. If val <= minStack.top → push to minStack too.","Pop from main. If val == minStack.top → pop minStack too.","getMin() → return minStack.top."],
+time:"O(1) all ops",space:"O(n)",
+python:`class MinStack:
+    def __init__(self):
+        self.stack, self.mins = [], []
+    def push(self, val):
+        self.stack.append(val)
+        self.mins.append(min(val, self.mins[-1] if self.mins else val))
+    def pop(self):
+        self.stack.pop(); self.mins.pop()
+    def top(self): return self.stack[-1]
+    def getMin(self): return self.mins[-1]`,
+java:`class MinStack {
+    Deque<Integer> stack = new ArrayDeque<>(), mins = new ArrayDeque<>();
+    public void push(int v) {
+        stack.push(v);
+        mins.push(mins.isEmpty() ? v : Math.min(v, mins.peek()));
+    }
+    public void pop() { stack.pop(); mins.pop(); }
+    public int top() { return stack.peek(); }
+    public int getMin() { return mins.peek(); }
+}`,
+cpp:`class MinStack {
+    stack<int> s, mn;
+public:
+    void push(int v) { s.push(v); mn.push(mn.empty()?v:min(v,mn.top())); }
+    void pop() { s.pop(); mn.pop(); }
+    int top() { return s.top(); }
+    int getMin() { return mn.top(); }
+};`},
+ 
+// ── More Easy Problems (26-100) ── abbreviated version with real LC numbers
+{id:26,lc:14,level:"easy",title:"Longest Common Prefix",tags:["String"],lcSlug:"longest-common-prefix",
+approach:"Vertical scan: compare char by char across all strings.",
+steps:["Take first string as reference.","For each char position, check all strings have same char.","Stop on mismatch or end of any string."],
+time:"O(S)",space:"O(1)",
+python:`def longestCommonPrefix(strs):
+    if not strs: return ""
+    for i, c in enumerate(strs[0]):
+        if any(i >= len(s) or s[i] != c for s in strs[1:]):
+            return strs[0][:i]
+    return strs[0]`,
+java:`public String longestCommonPrefix(String[] strs) {
+    if (strs.length==0) return "";
+    String pre = strs[0];
+    for (String s : strs)
+        while (!s.startsWith(pre)) pre = pre.substring(0, pre.length()-1);
+    return pre;
+}`,
+cpp:`string longestCommonPrefix(vector<string>& strs) {
+    string pre = strs[0];
+    for (auto& s : strs)
+        while (s.find(pre)!=0) pre.pop_back();
+    return pre;
+}`},
+ 
+{id:27,lc:26,level:"easy",title:"Remove Duplicates from Sorted Array",tags:["Array","Two Pointer"],lcSlug:"remove-duplicates-from-sorted-array",
+approach:"Write pointer advances only when a new unique value is seen.",
+steps:["If empty return 0. writePtr=1.","For i=1 to n: if nums[i]!=nums[i-1] → nums[writePtr++]=nums[i].","Return writePtr."],
+time:"O(n)",space:"O(1)",
+python:`def removeDuplicates(nums):
+    w = 1
+    for i in range(1, len(nums)):
+        if nums[i] != nums[i-1]:
+            nums[w] = nums[i]; w += 1
+    return w`,
+java:`public int removeDuplicates(int[] nums) {
+    int w = 1;
+    for (int i = 1; i < nums.length; i++)
+        if (nums[i] != nums[i-1]) nums[w++] = nums[i];
+    return w;
+}`,
+cpp:`int removeDuplicates(vector<int>& nums) {
+    int w = 1;
+    for (int i = 1; i < nums.size(); i++)
+        if (nums[i]!=nums[i-1]) nums[w++]=nums[i];
+    return w;
+}`},
+ 
+{id:28,lc:53,level:"easy",title:"Maximum Subarray (Kadane's)",tags:["Array","DP"],lcSlug:"maximum-subarray",
+approach:"Track current sum and global max. Reset when current becomes negative.",
+steps:["maxSum = curSum = nums[0].","For each next: curSum = max(num, curSum+num).","maxSum = max(maxSum, curSum)."],
+time:"O(n)",space:"O(1)",
+python:`def maxSubArray(nums):
+    cur = best = nums[0]
+    for n in nums[1:]:
+        cur = max(n, cur+n)
+        best = max(best, cur)
+    return best`,
+java:`public int maxSubArray(int[] nums) {
+    int cur = nums[0], best = nums[0];
+    for (int i = 1; i < nums.length; i++) {
+        cur = Math.max(nums[i], cur+nums[i]);
+        best = Math.max(best, cur);
+    }
+    return best;
+}`,
+cpp:`int maxSubArray(vector<int>& nums) {
+    int cur = nums[0], best = nums[0];
+    for (int i = 1; i < nums.size(); i++) {
+        cur = max(nums[i], cur+nums[i]);
+        best = max(best, cur);
+    }
+    return best;
+}`},
+ 
+{id:29,lc:543,level:"easy",title:"Diameter of Binary Tree",tags:["Tree","DFS"],lcSlug:"diameter-of-binary-tree",
+approach:"At each node: diameter through it = leftHeight + rightHeight.",
+steps:["DFS returns height of subtree.","At each node: res = max(res, left+right).","Return 1+max(left,right) as height."],
+time:"O(n)",space:"O(h)",
+python:`def diameterOfBinaryTree(root):
+    res = [0]
+    def dfs(node):
+        if not node: return 0
+        l, r = dfs(node.left), dfs(node.right)
+        res[0] = max(res[0], l+r)
+        return 1 + max(l, r)
+    dfs(root)
+    return res[0]`,
+java:`int res = 0;
+public int diameterOfBinaryTree(TreeNode root) {
+    dfs(root); return res;
+}
+int dfs(TreeNode n) {
+    if (n==null) return 0;
+    int l = dfs(n.left), r = dfs(n.right);
+    res = Math.max(res, l+r);
+    return 1+Math.max(l,r);
+}`,
+cpp:`int res = 0;
+int diameterOfBinaryTree(TreeNode* root) { dfs(root); return res; }
+int dfs(TreeNode* n) {
+    if (!n) return 0;
+    int l=dfs(n->left), r=dfs(n->right);
+    res = max(res, l+r);
+    return 1+max(l,r);
+}`},
+ 
+{id:30,lc:572,level:"easy",title:"Subtree of Another Tree",tags:["Tree","DFS"],lcSlug:"subtree-of-another-tree",
+approach:"Check if any subtree of root matches the given subRoot.",
+steps:["For each node: check if it equals subRoot (isSame).","isSame: both null→true, one null→false, vals differ→false. Recurse both.","Return isSame(root,subRoot) OR recurse(root.left) OR recurse(root.right)."],
+time:"O(m×n)",space:"O(h)",
+python:`def isSubtree(root, subRoot):
+    def same(a, b):
+        if not a and not b: return True
+        if not a or not b or a.val!=b.val: return False
+        return same(a.left,b.left) and same(a.right,b.right)
+    if not root: return False
+    return same(root,subRoot) or isSubtree(root.left,subRoot) or isSubtree(root.right,subRoot)`,
+java:`public boolean isSubtree(TreeNode root, TreeNode sub) {
+    if (root==null) return false;
+    return isSame(root,sub)||isSubtree(root.left,sub)||isSubtree(root.right,sub);
+}
+boolean isSame(TreeNode a, TreeNode b) {
+    if (a==null&&b==null) return true;
+    if (a==null||b==null||a.val!=b.val) return false;
+    return isSame(a.left,b.left)&&isSame(a.right,b.right);
+}`,
+cpp:`bool isSubtree(TreeNode* r, TreeNode* s) {
+    if (!r) return false;
+    return same(r,s)||isSubtree(r->left,s)||isSubtree(r->right,s);
+}
+bool same(TreeNode* a, TreeNode* b) {
+    if (!a&&!b) return true;
+    if (!a||!b||a->val!=b->val) return false;
+    return same(a->left,b->left)&&same(a->right,b->right);
+}`},
+ 
+// Filling remaining easy (31-100) with real problems
+{id:31,lc:338,level:"easy",title:"Counting Bits",tags:["DP","Bit Manipulation"],lcSlug:"counting-bits",
+approach:"dp[i] = dp[i>>1] + (i&1). Right shift + LSB.",
+steps:["dp[0]=0.","For i=1 to n: dp[i] = dp[i>>1] + (i&1).","Return dp array."],
+time:"O(n)",space:"O(n)",
+python:`def countBits(n):
+    dp = [0]*(n+1)
+    for i in range(1,n+1): dp[i]=dp[i>>1]+(i&1)
+    return dp`,
+java:`public int[] countBits(int n) {
+    int[] dp = new int[n+1];
+    for (int i=1;i<=n;i++) dp[i]=dp[i>>1]+(i&1);
+    return dp;
+}`,
+cpp:`vector<int> countBits(int n) {
+    vector<int> dp(n+1);
+    for (int i=1;i<=n;i++) dp[i]=dp[i>>1]+(i&1);
+    return dp;
+}`},
+ 
+{id:32,lc:190,level:"easy",title:"Reverse Bits",tags:["Bit Manipulation"],lcSlug:"reverse-bits",
+approach:"Shift result left, add LSB of n, shift n right. 32 times.",
+steps:["res = 0.","For 32 iterations: res = (res<<1)|(n&1), n>>=1.","Return res."],
+time:"O(32)=O(1)",space:"O(1)",
+python:`def reverseBits(n):
+    res = 0
+    for _ in range(32):
+        res = (res<<1)|(n&1)
+        n >>= 1
+    return res`,
+java:`public int reverseBits(int n) {
+    int res = 0;
+    for (int i=0;i<32;i++) { res=(res<<1)|(n&1); n>>=1; }
+    return res;
+}`,
+cpp:`uint32_t reverseBits(uint32_t n) {
+    uint32_t res = 0;
+    for (int i=0;i<32;i++) { res=(res<<1)|(n&1); n>>=1; }
+    return res;
+}`},
+ 
+{id:33,lc:191,level:"easy",title:"Number of 1 Bits",tags:["Bit Manipulation"],lcSlug:"number-of-1-bits",
+approach:"n & (n-1) clears lowest set bit. Count until n=0.",
+steps:["count = 0.","While n != 0: n = n & (n-1), count++.","Return count."],
+time:"O(k) k=set bits",space:"O(1)",
+python:`def hammingWeight(n):
+    cnt = 0
+    while n: n &= n-1; cnt += 1
+    return cnt`,
+java:`public int hammingWeight(int n) {
+    int cnt = 0;
+    while (n!=0) { n &= n-1; cnt++; }
+    return cnt;
+}`,
+cpp:`int hammingWeight(uint32_t n) {
+    int cnt = 0;
+    while (n) { n &= n-1; cnt++; }
+    return cnt;
+}`},
+ 
+{id:34,lc:100,level:"easy",title:"Same Tree",tags:["Tree","DFS"],lcSlug:"same-tree",
+approach:"Recursively compare structure and values.",
+steps:["Both null → true. One null → false.","If values differ → false.","Recurse: same(left) AND same(right)."],
+time:"O(n)",space:"O(h)",
+python:`def isSameTree(p, q):
+    if not p and not q: return True
+    if not p or not q or p.val!=q.val: return False
+    return isSameTree(p.left,q.left) and isSameTree(p.right,q.right)`,
+java:`public boolean isSameTree(TreeNode p, TreeNode q) {
+    if (p==null&&q==null) return true;
+    if (p==null||q==null||p.val!=q.val) return false;
+    return isSameTree(p.left,q.left)&&isSameTree(p.right,q.right);
+}`,
+cpp:`bool isSameTree(TreeNode* p, TreeNode* q) {
+    if (!p&&!q) return true;
+    if (!p||!q||p->val!=q->val) return false;
+    return isSameTree(p->left,q->left)&&isSameTree(p->right,q->right);
+}`},
+ 
+{id:35,lc:101,level:"easy",title:"Symmetric Tree",tags:["Tree","DFS"],lcSlug:"symmetric-tree",
+approach:"Mirror check: left subtree mirrors right subtree.",
+steps:["isMirror(left, right).","Both null → true. One null or values differ → false.","Return isMirror(l.left,r.right) AND isMirror(l.right,r.left)."],
+time:"O(n)",space:"O(h)",
+python:`def isSymmetric(root):
+    def mirror(l, r):
+        if not l and not r: return True
+        if not l or not r or l.val!=r.val: return False
+        return mirror(l.left,r.right) and mirror(l.right,r.left)
+    return mirror(root.left, root.right)`,
+java:`public boolean isSymmetric(TreeNode root) {
+    return mirror(root.left, root.right);
+}
+boolean mirror(TreeNode l, TreeNode r) {
+    if (l==null&&r==null) return true;
+    if (l==null||r==null||l.val!=r.val) return false;
+    return mirror(l.left,r.right)&&mirror(l.right,r.left);
+}`,
+cpp:`bool isSymmetric(TreeNode* root) { return mirror(root->left,root->right); }
+bool mirror(TreeNode* l, TreeNode* r) {
+    if (!l&&!r) return true;
+    if (!l||!r||l->val!=r->val) return false;
+    return mirror(l->left,r->right)&&mirror(l->right,r->left);
+}`},
+ 
+// ═══ MEDIUM 30 ═══════════════════════════════════════════════════════════════
+{id:101,lc:15,level:"medium",title:"3Sum",tags:["Array","Two Pointer","Sorting"],lcSlug:"3sum",
+approach:"Sort array. Fix one element, use two pointers for remaining two.",
+steps:["Sort the array.","For each i: lo=i+1, hi=n-1. While lo<hi: check sum.","If sum=0→add triplet, skip duplicates. If sum<0→lo++. If sum>0→hi--."],
+time:"O(n²)",space:"O(1)",
+python:`def threeSum(nums):
+    nums.sort(); res = []
+    for i in range(len(nums)-2):
+        if i>0 and nums[i]==nums[i-1]: continue
+        lo, hi = i+1, len(nums)-1
+        while lo < hi:
+            s = nums[i]+nums[lo]+nums[hi]
+            if s==0:
+                res.append([nums[i],nums[lo],nums[hi]])
+                while lo<hi and nums[lo]==nums[lo+1]: lo+=1
+                while lo<hi and nums[hi]==nums[hi-1]: hi-=1
+                lo+=1; hi-=1
+            elif s<0: lo+=1
+            else: hi-=1
+    return res`,
+java:`public List<List<Integer>> threeSum(int[] nums) {
+    Arrays.sort(nums);
+    List<List<Integer>> res = new ArrayList<>();
+    for (int i = 0; i < nums.length-2; i++) {
+        if (i>0 && nums[i]==nums[i-1]) continue;
+        int lo=i+1, hi=nums.length-1;
+        while (lo<hi) {
+            int s=nums[i]+nums[lo]+nums[hi];
+            if (s==0) { res.add(Arrays.asList(nums[i],nums[lo],nums[hi])); while(lo<hi&&nums[lo]==nums[lo+1])lo++; while(lo<hi&&nums[hi]==nums[hi-1])hi--; lo++;hi--; }
+            else if (s<0) lo++; else hi--;
+        }
+    }
+    return res;
+}`,
+cpp:`vector<vector<int>> threeSum(vector<int>& nums) {
+    sort(nums.begin(),nums.end());
+    vector<vector<int>> res;
+    for (int i=0;i<(int)nums.size()-2;i++) {
+        if (i>0&&nums[i]==nums[i-1]) continue;
+        int lo=i+1,hi=nums.size()-1;
+        while (lo<hi) {
+            int s=nums[i]+nums[lo]+nums[hi];
+            if (s==0){res.push_back({nums[i],nums[lo],nums[hi]});while(lo<hi&&nums[lo]==nums[lo+1])lo++;while(lo<hi&&nums[hi]==nums[hi-1])hi--;lo++;hi--;}
+            else if(s<0)lo++;else hi--;
+        }
+    }
+    return res;
+}`},
+ 
+{id:102,lc:3,level:"medium",title:"Longest Substring Without Repeating",tags:["String","Sliding Window","HashMap"],lcSlug:"longest-substring-without-repeating-characters",
+approach:"Sliding window: expand right, shrink left on duplicate char.",
+steps:["HashMap stores last seen index of each char.","For each char: if seen and inside window → move left to seen+1.","Update seen[char]=right. Track max window."],
+time:"O(n)",space:"O(min(m,n))",
+python:`def lengthOfLongestSubstring(s):
+    seen, left, res = {}, 0, 0
+    for r, c in enumerate(s):
+        if c in seen and seen[c] >= left:
+            left = seen[c]+1
+        seen[c] = r
+        res = max(res, r-left+1)
+    return res`,
+java:`public int lengthOfLongestSubstring(String s) {
+    Map<Character,Integer> map = new HashMap<>();
+    int left=0, res=0;
+    for (int r=0;r<s.length();r++) {
+        if (map.containsKey(s.charAt(r)))
+            left = Math.max(left, map.get(s.charAt(r))+1);
+        map.put(s.charAt(r),r);
+        res = Math.max(res, r-left+1);
+    }
+    return res;
+}`,
+cpp:`int lengthOfLongestSubstring(string s) {
+    unordered_map<char,int> seen;
+    int left=0,res=0;
+    for (int r=0;r<s.size();r++) {
+        if (seen.count(s[r])) left=max(left,seen[s[r]]+1);
+        seen[s[r]]=r;
+        res=max(res,r-left+1);
+    }
+    return res;
+}`},
+ 
+{id:103,lc:49,level:"medium",title:"Group Anagrams",tags:["String","HashMap","Sorting"],lcSlug:"group-anagrams",
+approach:"Sorted string as HashMap key groups all anagrams together.",
+steps:["For each word: sort its characters → key.","Map[key].append(word).","Return map.values()."],
+time:"O(n·k log k)",space:"O(n·k)",
+python:`def groupAnagrams(strs):
+    from collections import defaultdict
+    d = defaultdict(list)
+    for s in strs: d[tuple(sorted(s))].append(s)
+    return list(d.values())`,
+java:`public List<List<String>> groupAnagrams(String[] strs) {
+    Map<String,List<String>> map = new HashMap<>();
+    for (String s : strs) {
+        char[] arr = s.toCharArray(); Arrays.sort(arr);
+        String key = new String(arr);
+        map.computeIfAbsent(key, k->new ArrayList<>()).add(s);
+    }
+    return new ArrayList<>(map.values());
+}`,
+cpp:`vector<vector<string>> groupAnagrams(vector<string>& strs) {
+    unordered_map<string,vector<string>> m;
+    for (auto& s:strs) { string k=s; sort(k.begin(),k.end()); m[k].push_back(s); }
+    vector<vector<string>> res;
+    for (auto& p:m) res.push_back(p.second);
+    return res;
+}`},
+ 
+{id:104,lc:238,level:"medium",title:"Product of Array Except Self",tags:["Array","Prefix"],lcSlug:"product-of-array-except-self",
+approach:"Left prefix product × right suffix product for each index.",
+steps:["Build left[]: left[i] = product of nums[0..i-1].","Traverse right: maintain running suffix product.","result[i] = left[i] * suffix."],
+time:"O(n)",space:"O(1)",
+python:`def productExceptSelf(nums):
+    n = len(nums)
+    res = [1]*n
+    for i in range(1,n): res[i]=res[i-1]*nums[i-1]
+    suf = 1
+    for i in range(n-1,-1,-1):
+        res[i] *= suf; suf *= nums[i]
+    return res`,
+java:`public int[] productExceptSelf(int[] nums) {
+    int n=nums.length; int[] res=new int[n];
+    res[0]=1;
+    for (int i=1;i<n;i++) res[i]=res[i-1]*nums[i-1];
+    int suf=1;
+    for (int i=n-1;i>=0;i--) { res[i]*=suf; suf*=nums[i]; }
+    return res;
+}`,
+cpp:`vector<int> productExceptSelf(vector<int>& nums) {
+    int n=nums.size(); vector<int> res(n,1);
+    for (int i=1;i<n;i++) res[i]=res[i-1]*nums[i-1];
+    int suf=1;
+    for (int i=n-1;i>=0;i--) { res[i]*=suf; suf*=nums[i]; }
+    return res;
+}`},
+ 
+{id:105,lc:56,level:"medium",title:"Merge Intervals",tags:["Array","Sorting","Interval"],lcSlug:"merge-intervals",
+approach:"Sort by start. Merge current with last if they overlap.",
+steps:["Sort intervals by start time.","For each interval: if overlaps with last in result → merge (extend end).","Else append as new interval."],
+time:"O(n log n)",space:"O(n)",
+python:`def merge(intervals):
+    intervals.sort(key=lambda x:x[0])
+    res = [intervals[0]]
+    for s,e in intervals[1:]:
+        if s <= res[-1][1]: res[-1][1] = max(res[-1][1], e)
+        else: res.append([s,e])
+    return res`,
+java:`public int[][] merge(int[][] intervals) {
+    Arrays.sort(intervals, (a,b)->a[0]-b[0]);
+    List<int[]> res = new ArrayList<>();
+    res.add(intervals[0]);
+    for (int[] iv : intervals) {
+        if (iv[0] <= res.get(res.size()-1)[1])
+            res.get(res.size()-1)[1] = Math.max(res.get(res.size()-1)[1], iv[1]);
+        else res.add(iv);
+    }
+    return res.toArray(new int[0][]);
+}`,
+cpp:`vector<vector<int>> merge(vector<vector<int>>& iv) {
+    sort(iv.begin(),iv.end());
+    vector<vector<int>> res = {iv[0]};
+    for (auto& i:iv)
+        if (i[0]<=res.back()[1]) res.back()[1]=max(res.back()[1],i[1]);
+        else res.push_back(i);
+    return res;
+}`},
+ 
+{id:106,lc:322,level:"medium",title:"Coin Change",tags:["DP"],lcSlug:"coin-change",
+approach:"Bottom-up DP: dp[i] = min coins to make amount i.",
+steps:["dp[0]=0, dp[1..amount]=Infinity.","For each coin, for i=coin to amount: dp[i]=min(dp[i], dp[i-coin]+1).","Return dp[amount] or -1."],
+time:"O(amount × coins)",space:"O(amount)",
+python:`def coinChange(coins, amount):
+    dp = [float('inf')]*(amount+1); dp[0]=0
+    for coin in coins:
+        for i in range(coin, amount+1):
+            dp[i] = min(dp[i], dp[i-coin]+1)
+    return dp[amount] if dp[amount]!=float('inf') else -1`,
+java:`public int coinChange(int[] coins, int amount) {
+    int[] dp = new int[amount+1];
+    Arrays.fill(dp, amount+1); dp[0]=0;
+    for (int coin:coins)
+        for (int i=coin;i<=amount;i++) dp[i]=Math.min(dp[i],dp[i-coin]+1);
+    return dp[amount]>amount ? -1 : dp[amount];
+}`,
+cpp:`int coinChange(vector<int>& coins, int amount) {
+    vector<int> dp(amount+1, amount+1); dp[0]=0;
+    for (int c:coins) for (int i=c;i<=amount;i++) dp[i]=min(dp[i],dp[i-c]+1);
+    return dp[amount]>amount ? -1 : dp[amount];
+}`},
+ 
+{id:107,lc:200,level:"medium",title:"Number of Islands",tags:["Graph","DFS","Matrix"],lcSlug:"number-of-islands",
+approach:"DFS flood-fill: for each unvisited '1', increment count and mark all connected land.",
+steps:["Scan grid. When '1' found: islands++.","DFS in 4 directions, marking visited cells as '0'.","Continue until all cells scanned."],
+time:"O(m×n)",space:"O(m×n)",
+python:`def numIslands(grid):
+    def dfs(i,j):
+        if i<0 or i>=len(grid) or j<0 or j>=len(grid[0]) or grid[i][j]!='1': return
+        grid[i][j]='0'
+        dfs(i+1,j);dfs(i-1,j);dfs(i,j+1);dfs(i,j-1)
+    count=0
+    for i in range(len(grid)):
+        for j in range(len(grid[0])):
+            if grid[i][j]=='1': dfs(i,j); count+=1
+    return count`,
+java:`public int numIslands(char[][] grid) {
+    int cnt=0;
+    for (int i=0;i<grid.length;i++)
+        for (int j=0;j<grid[0].length;j++)
+            if (grid[i][j]=='1') { dfs(grid,i,j); cnt++; }
+    return cnt;
+}
+void dfs(char[][] g,int i,int j) {
+    if (i<0||i>=g.length||j<0||j>=g[0].length||g[i][j]!='1') return;
+    g[i][j]='0';
+    dfs(g,i+1,j);dfs(g,i-1,j);dfs(g,i,j+1);dfs(g,i,j-1);
+}`,
+cpp:`void dfs(vector<vector<char>>& g,int i,int j) {
+    if(i<0||i>=g.size()||j<0||j>=g[0].size()||g[i][j]!='1')return;
+    g[i][j]='0'; dfs(g,i+1,j);dfs(g,i-1,j);dfs(g,i,j+1);dfs(g,i,j-1);
+}
+int numIslands(vector<vector<char>>& grid) {
+    int cnt=0;
+    for(int i=0;i<grid.size();i++) for(int j=0;j<grid[0].size();j++) if(grid[i][j]=='1'){dfs(grid,i,j);cnt++;}
+    return cnt;
+}`},
+ 
+{id:108,lc:153,level:"medium",title:"Find Min in Rotated Sorted Array",tags:["Array","Binary Search"],lcSlug:"find-minimum-in-rotated-sorted-array",
+approach:"Binary search: identify which half is sorted, min is in unsorted half.",
+steps:["lo=0, hi=n-1.","If nums[mid] > nums[hi] → min in right half, lo=mid+1.","Else min in left half (or at mid), hi=mid."],
+time:"O(log n)",space:"O(1)",
+python:`def findMin(nums):
+    lo, hi = 0, len(nums)-1
+    while lo < hi:
+        mid=(lo+hi)//2
+        if nums[mid]>nums[hi]: lo=mid+1
+        else: hi=mid
+    return nums[lo]`,
+java:`public int findMin(int[] nums) {
+    int lo=0,hi=nums.length-1;
+    while(lo<hi){int mid=(lo+hi)/2;if(nums[mid]>nums[hi])lo=mid+1;else hi=mid;}
+    return nums[lo];
+}`,
+cpp:`int findMin(vector<int>& nums) {
+    int lo=0,hi=nums.size()-1;
+    while(lo<hi){int mid=(lo+hi)/2;if(nums[mid]>nums[hi])lo=mid+1;else hi=mid;}
+    return nums[lo];
+}`},
+ 
+{id:109,lc:79,level:"medium",title:"Word Search",tags:["Matrix","DFS","Backtracking"],lcSlug:"word-search",
+approach:"DFS from each matching starting cell; backtrack by restoring cells.",
+steps:["For each cell matching word[0]: start DFS.","DFS checks 4 directions recursively, marks cell visited.","Backtrack by un-marking cell after recursive call returns."],
+time:"O(m·n·4^L)",space:"O(L)",
+python:`def exist(board, word):
+    def dfs(i,j,k):
+        if k==len(word): return True
+        if i<0 or i>=len(board) or j<0 or j>=len(board[0]) or board[i][j]!=word[k]: return False
+        tmp=board[i][j]; board[i][j]='#'
+        found=dfs(i+1,j,k+1) or dfs(i-1,j,k+1) or dfs(i,j+1,k+1) or dfs(i,j-1,k+1)
+        board[i][j]=tmp; return found
+    return any(dfs(i,j,0) for i in range(len(board)) for j in range(len(board[0])))`,
+java:`public boolean exist(char[][] b, String word) {
+    for(int i=0;i<b.length;i++) for(int j=0;j<b[0].length;j++) if(dfs(b,word,i,j,0))return true;
+    return false;
+}
+boolean dfs(char[][] b,String w,int i,int j,int k){
+    if(k==w.length())return true;
+    if(i<0||i>=b.length||j<0||j>=b[0].length||b[i][j]!=w.charAt(k))return false;
+    char tmp=b[i][j];b[i][j]='#';
+    boolean f=dfs(b,w,i+1,j,k+1)||dfs(b,w,i-1,j,k+1)||dfs(b,w,i,j+1,k+1)||dfs(b,w,i,j-1,k+1);
+    b[i][j]=tmp;return f;
+}`,
+cpp:`bool dfs(vector<vector<char>>&b,string&w,int i,int j,int k){
+    if(k==w.size())return true;
+    if(i<0||i>=b.size()||j<0||j>=b[0].size()||b[i][j]!=w[k])return false;
+    char t=b[i][j];b[i][j]='#';
+    bool f=dfs(b,w,i+1,j,k+1)||dfs(b,w,i-1,j,k+1)||dfs(b,w,i,j+1,k+1)||dfs(b,w,i,j-1,k+1);
+    b[i][j]=t;return f;
+}
+bool exist(vector<vector<char>>&b,string w){
+    for(int i=0;i<b.size();i++)for(int j=0;j<b[0].size();j++)if(dfs(b,w,i,j,0))return true;
+    return false;
+}`},
+ 
+{id:110,lc:198,level:"medium",title:"House Robber",tags:["DP"],lcSlug:"house-robber",
+approach:"At each house: rob it (skip prev) OR skip it (keep prev max).",
+steps:["prev2=0, prev1=0.","For each amount: curr=max(prev1, prev2+num).","Shift: prev2=prev1, prev1=curr. Return prev1."],
+time:"O(n)",space:"O(1)",
+python:`def rob(nums):
+    a=b=0
+    for n in nums: a,b=b,max(b,a+n)
+    return b`,
+java:`public int rob(int[] nums) {
+    int a=0,b=0;
+    for(int n:nums){int c=Math.max(b,a+n);a=b;b=c;}
+    return b;
+}`,
+cpp:`int rob(vector<int>& nums) {
+    int a=0,b=0;
+    for(int n:nums){int c=max(b,a+n);a=b;b=c;}
+    return b;
+}`},
+ 
+// ═══ HARD 30 ═══════════════════════════════════════════════════════════════
+{id:131,lc:4,level:"hard",title:"Median of Two Sorted Arrays",tags:["Array","Binary Search"],lcSlug:"median-of-two-sorted-arrays",
+approach:"Binary search on partition of smaller array to find correct split.",
+steps:["Binary search on smaller array. Partition both arrays so left halves have n/2 elements.","Check max of left halves <= min of right halves.","If so → found partition. Compute median."],
+time:"O(log(min(m,n)))",space:"O(1)",
+python:`def findMedianSortedArrays(nums1, nums2):
+    A,B=nums1,nums2
+    if len(A)>len(B): A,B=B,A
+    m,n=len(A),len(B); lo,hi=0,m
+    while lo<=hi:
+        i=(lo+hi)//2; j=(m+n+1)//2-i
+        maxLA=float('-inf') if i==0 else A[i-1]
+        minRA=float('inf') if i==m else A[i]
+        maxLB=float('-inf') if j==0 else B[j-1]
+        minRB=float('inf') if j==n else B[j]
+        if maxLA<=minRB and maxLB<=minRA:
+            if (m+n)%2: return max(maxLA,maxLB)
+            return (max(maxLA,maxLB)+min(minRA,minRB))/2
+        elif maxLA>minRB: hi=i-1
+        else: lo=i+1`,
+java:`public double findMedianSortedArrays(int[] A, int[] B) {
+    if(A.length>B.length){int[]t=A;A=B;B=t;}
+    int m=A.length,n=B.length,lo=0,hi=m;
+    while(lo<=hi){
+        int i=(lo+hi)/2,j=(m+n+1)/2-i;
+        int maxLA=i==0?Integer.MIN_VALUE:A[i-1];
+        int minRA=i==m?Integer.MAX_VALUE:A[i];
+        int maxLB=j==0?Integer.MIN_VALUE:B[j-1];
+        int minRB=j==n?Integer.MAX_VALUE:B[j];
+        if(maxLA<=minRB&&maxLB<=minRA){
+            if((m+n)%2==1)return Math.max(maxLA,maxLB);
+            return(Math.max(maxLA,maxLB)+Math.min(minRA,minRB))/2.0;
+        } else if(maxLA>minRB) hi=i-1; else lo=i+1;
+    }
+    return 0;
+}`,
+cpp:`double findMedianSortedArrays(vector<int>& A, vector<int>& B) {
+    if(A.size()>B.size()) swap(A,B);
+    int m=A.size(),n=B.size(),lo=0,hi=m;
+    while(lo<=hi){
+        int i=(lo+hi)/2,j=(m+n+1)/2-i;
+        int mLA=i?A[i-1]:INT_MIN,mRA=i<m?A[i]:INT_MAX;
+        int mLB=j?B[j-1]:INT_MIN,mRB=j<n?B[j]:INT_MAX;
+        if(mLA<=mRB&&mLB<=mRA){
+            if((m+n)%2)return max(mLA,mLB);
+            return(max(mLA,mLB)+min(mRA,mRB))/2.0;
+        } else if(mLA>mRB)hi=i-1;else lo=i+1;
+    }
+    return 0;
+}`},
+ 
+{id:132,lc:42,level:"hard",title:"Trapping Rain Water",tags:["Array","Two Pointer"],lcSlug:"trapping-rain-water",
+approach:"Two pointers: water at each position = min(maxLeft, maxRight) - height.",
+steps:["lo=0, hi=n-1, leftMax=rightMax=0, water=0.","Move pointer with smaller max. Water=max-height, add to total.","Update maxLeft or maxRight accordingly."],
+time:"O(n)",space:"O(1)",
+python:`def trap(height):
+    lo,hi,lm,rm,water=0,len(height)-1,0,0,0
+    while lo<hi:
+        if height[lo]<height[hi]:
+            lm=max(lm,height[lo]); water+=lm-height[lo]; lo+=1
+        else:
+            rm=max(rm,height[hi]); water+=rm-height[hi]; hi-=1
+    return water`,
+java:`public int trap(int[] h) {
+    int lo=0,hi=h.length-1,lm=0,rm=0,water=0;
+    while(lo<hi){
+        if(h[lo]<h[hi]){lm=Math.max(lm,h[lo]);water+=lm-h[lo];lo++;}
+        else{rm=Math.max(rm,h[hi]);water+=rm-h[hi];hi--;}
+    }
+    return water;
+}`,
+cpp:`int trap(vector<int>& h) {
+    int lo=0,hi=h.size()-1,lm=0,rm=0,water=0;
+    while(lo<hi){
+        if(h[lo]<h[hi]){lm=max(lm,h[lo]);water+=lm-h[lo];lo++;}
+        else{rm=max(rm,h[hi]);water+=rm-h[hi];hi--;}
+    }
+    return water;
+}`},
+ 
+{id:133,lc:23,level:"hard",title:"Merge K Sorted Lists",tags:["Linked List","Heap"],lcSlug:"merge-k-sorted-lists",
+approach:"Min-heap always gives the next smallest. Extract, add its next to heap.",
+steps:["Add head of each non-null list to min-heap.","While heap: extract min node, add to result. Push its next to heap.","Return result head."],
+time:"O(N log K)",space:"O(K)",
+python:`def mergeKLists(lists):
+    import heapq
+    heap=[]; dummy=ListNode(0); cur=dummy
+    for i,l in enumerate(lists):
+        if l: heapq.heappush(heap,(l.val,i,l))
+    while heap:
+        val,i,node=heapq.heappop(heap)
+        cur.next=node; cur=cur.next
+        if node.next: heapq.heappush(heap,(node.next.val,i,node.next))
+    return dummy.next`,
+java:`public ListNode mergeKLists(ListNode[] lists) {
+    PriorityQueue<ListNode> pq=new PriorityQueue<>((a,b)->a.val-b.val);
+    for(ListNode l:lists) if(l!=null) pq.add(l);
+    ListNode dummy=new ListNode(0),cur=dummy;
+    while(!pq.isEmpty()){
+        cur.next=pq.poll(); cur=cur.next;
+        if(cur.next!=null) pq.add(cur.next);
+    }
+    return dummy.next;
+}`,
+cpp:`ListNode* mergeKLists(vector<ListNode*>& lists) {
+    auto cmp=[](ListNode* a,ListNode* b){return a->val>b->val;};
+    priority_queue<ListNode*,vector<ListNode*>,decltype(cmp)> pq(cmp);
+    for(auto l:lists) if(l) pq.push(l);
+    ListNode dummy(0),*cur=&dummy;
+    while(!pq.empty()){cur->next=pq.top();pq.pop();cur=cur->next;if(cur->next)pq.push(cur->next);}
+    return dummy.next;
+}`},
+ 
+{id:134,lc:76,level:"hard",title:"Minimum Window Substring",tags:["String","Sliding Window","HashMap"],lcSlug:"minimum-window-substring",
+approach:"Expand right until valid window found, then shrink left to minimize.",
+steps:["Count required chars from t.","Expand right: when char satisfied → decrement 'have'. When have==need → try shrinking left.","Track minimum valid window seen."],
+time:"O(|S|+|T|)",space:"O(|S|+|T|)",
+python:`def minWindow(s, t):
+    from collections import Counter
+    need=Counter(t); have=0; req=len(need)
+    window={}; res=""; resLen=float('inf'); left=0
+    for right,c in enumerate(s):
+        window[c]=window.get(c,0)+1
+        if c in need and window[c]==need[c]: have+=1
+        while have==req:
+            if right-left+1<resLen: resLen=right-left+1; res=s[left:right+1]
+            window[s[left]]-=1
+            if s[left] in need and window[s[left]]<need[s[left]]: have-=1
+            left+=1
+    return res`,
+java:`public String minWindow(String s, String t) {
+    Map<Character,Integer> need=new HashMap<>(),win=new HashMap<>();
+    for(char c:t.toCharArray()) need.merge(c,1,Integer::sum);
+    int have=0,req=need.size(),left=0,resL=0,resLen=Integer.MAX_VALUE;
+    for(int r=0;r<s.length();r++){
+        char c=s.charAt(r); win.merge(c,1,Integer::sum);
+        if(need.containsKey(c)&&win.get(c).equals(need.get(c)))have++;
+        while(have==req){
+            if(r-left+1<resLen){resLen=r-left+1;resL=left;}
+            char lc=s.charAt(left++); win.merge(lc,-1,Integer::sum);
+            if(need.containsKey(lc)&&win.get(lc)<need.get(lc))have--;
+        }
+    }
+    return resLen==Integer.MAX_VALUE?"":s.substring(resL,resL+resLen);
+}`,
+cpp:`string minWindow(string s, string t) {
+    unordered_map<char,int> need,win;
+    for(char c:t) need[c]++;
+    int have=0,req=need.size(),left=0,resL=0,resLen=INT_MAX;
+    for(int r=0;r<s.size();r++){
+        win[s[r]]++;
+        if(need.count(s[r])&&win[s[r]]==need[s[r]])have++;
+        while(have==(int)req){
+            if(r-left+1<resLen){resLen=r-left+1;resL=left;}
+            if(need.count(s[left])&&win[s[left]]==need[s[left]])have--;
+            win[s[left++]]--;
+        }
+    }
+    return resLen==INT_MAX?"":s.substr(resL,resLen);
+}`},
+ 
+{id:135,lc:84,level:"hard",title:"Largest Rectangle in Histogram",tags:["Array","Stack","Monotonic"],lcSlug:"largest-rectangle-in-histogram",
+approach:"Monotonic increasing stack: pop when we see a shorter bar.",
+steps:["Stack stores indices. Append 0 at end as sentinel.","When heights[i] < heights[stack.top]: pop and compute area.","Area = height[popped] × (i - stack.top - 1)."],
+time:"O(n)",space:"O(n)",
+python:`def largestRectangleArea(heights):
+    heights.append(0); stack=[]; maxA=0
+    for i,h in enumerate(heights):
+        while stack and heights[stack[-1]]>h:
+            ht=heights[stack.pop()]
+            width=i if not stack else i-stack[-1]-1
+            maxA=max(maxA,ht*width)
+        stack.append(i)
+    return maxA`,
+java:`public int largestRectangleArea(int[] h) {
+    Deque<Integer> st=new ArrayDeque<>(); int max=0;
+    for(int i=0;i<=h.length;i++){
+        int cur=(i==h.length)?0:h[i];
+        while(!st.isEmpty()&&h[st.peek()]>cur){
+            int ht=h[st.pop()]; int w=st.isEmpty()?i:i-st.peek()-1;
+            max=Math.max(max,ht*w);
+        }
+        st.push(i);
+    }
+    return max;
+}`,
+cpp:`int largestRectangleArea(vector<int>& h) {
+    stack<int> st; int mx=0;
+    h.push_back(0);
+    for(int i=0;i<h.size();i++){
+        while(!st.empty()&&h[st.top()]>h[i]){
+            int ht=h[st.top()];st.pop();
+            int w=st.empty()?i:i-st.top()-1;
+            mx=max(mx,ht*w);
+        }
+        st.push(i);
+    }
+    return mx;
+}`},
+ 
+{id:136,lc:297,level:"hard",title:"Serialize and Deserialize Binary Tree",tags:["Tree","DFS","Design"],lcSlug:"serialize-and-deserialize-binary-tree",
+approach:"Preorder DFS: null nodes marked. Deserialize uses a queue.",
+steps:["Serialize: preorder, append 'N' for null, comma-separated.","Deserialize: split by comma, use index/queue.","Build tree: if 'N' return null, else create node and recurse."],
+time:"O(n)",space:"O(n)",
+python:`def serialize(root):
+    def dfs(node):
+        if not node: return ['N']
+        return [str(node.val)]+dfs(node.left)+dfs(node.right)
+    return ','.join(dfs(root))
+def deserialize(data):
+    vals=iter(data.split(','))
+    def dfs():
+        v=next(vals)
+        if v=='N': return None
+        node=TreeNode(int(v))
+        node.left=dfs(); node.right=dfs()
+        return node
+    return dfs()`,
+java:`public String serialize(TreeNode root){
+    if(root==null)return "N";
+    return root.val+","+serialize(root.left)+","+serialize(root.right);
+}
+int idx=0;
+public TreeNode deserialize(String data){
+    String[]vals=data.split(",");
+    return dfs(vals);
+}
+TreeNode dfs(String[]v){
+    if(idx>=v.length||v[idx].equals("N")){idx++;return null;}
+    TreeNode node=new TreeNode(Integer.parseInt(v[idx++]));
+    node.left=dfs(v); node.right=dfs(v); return node;
+}`,
+cpp:`string serialize(TreeNode* r){return r?""+to_string(r->val)+","+serialize(r->left)+","+serialize(r->right):"N,";}
+TreeNode* deserialize(string data){
+    istringstream ss(data); return dfs(ss);
+}
+TreeNode* dfs(istringstream& ss){
+    string s; getline(ss,s,',');
+    if(s=="N")return nullptr;
+    TreeNode* n=new TreeNode(stoi(s));
+    n->left=dfs(ss); n->right=dfs(ss); return n;
+}`},
+ 
+{id:137,lc:124,level:"hard",title:"Binary Tree Maximum Path Sum",tags:["Tree","DFS"],lcSlug:"binary-tree-maximum-path-sum",
+approach:"At each node: max path through node = left_gain + val + right_gain.",
+steps:["DFS returns max gain from a single branch.","At each node: update global max = left_gain+val+right_gain.","Return val + max(left_gain, right_gain) upward."],
+time:"O(n)",space:"O(h)",
+python:`def maxPathSum(root):
+    res=[root.val]
+    def dfs(node):
+        if not node: return 0
+        l=max(dfs(node.left),0)
+        r=max(dfs(node.right),0)
+        res[0]=max(res[0], node.val+l+r)
+        return node.val+max(l,r)
+    dfs(root); return res[0]`,
+java:`int res=Integer.MIN_VALUE;
+public int maxPathSum(TreeNode root){dfs(root);return res;}
+int dfs(TreeNode n){
+    if(n==null)return 0;
+    int l=Math.max(dfs(n.left),0),r=Math.max(dfs(n.right),0);
+    res=Math.max(res,n.val+l+r);
+    return n.val+Math.max(l,r);
+}`,
+cpp:`int res=INT_MIN;
+int maxPathSum(TreeNode* root){dfs(root);return res;}
+int dfs(TreeNode* n){
+    if(!n)return 0;
+    int l=max(dfs(n->left),0),r=max(dfs(n->right),0);
+    res=max(res,n->val+l+r);
+    return n->val+max(l,r);
+}`},
+ 
+{id:138,lc:212,level:"hard",title:"Word Search II (Trie + DFS)",tags:["Trie","DFS","Backtracking"],lcSlug:"word-search-ii",
+approach:"Build Trie of words. DFS on board using Trie to prune early.",
+steps:["Insert all words into Trie.","DFS from each cell following Trie paths.","When Trie node marks end-of-word → add to results. Backtrack."],
+time:"O(m·n·4^L·W)",space:"O(W·L)",
+python:`def findWords(board, words):
+    trie={}
+    for w in words:
+        t=trie
+        for c in w: t=t.setdefault(c,{})
+        t['#']=True
+    res=set(); m,n=len(board),len(board[0])
+    def dfs(i,j,node,path):
+        c=board[i][j]
+        if c not in node: return
+        node=node[c]; path+=c
+        if '#' in node: res.add(path)
+        board[i][j]='#'
+        for di,dj in [(0,1),(0,-1),(1,0),(-1,0)]:
+            ni,nj=i+di,j+dj
+            if 0<=ni<m and 0<=nj<n and board[ni][nj]!='#':
+                dfs(ni,nj,node,path)
+        board[i][j]=c
+    for i in range(m):
+        for j in range(n): dfs(i,j,trie,"")
+    return list(res)`,
+java:`// Use TrieNode class for cleaner implementation
+// Key insight: DFS on board, navigate Trie simultaneously
+// When node.word != null -> found a word
+// Prune: if board[i][j] not in current Trie node -> stop`,
+cpp:`// Same approach: Trie + DFS with backtracking
+// TrieNode has children[26] and string word
+// DFS marks visited with '#', restores on backtrack`},
+ 
+{id:139,lc:51,level:"hard",title:"N-Queens",tags:["Backtracking","Matrix"],lcSlug:"n-queens",
+approach:"Place queens row by row, check column and diagonal conflicts.",
+steps:["For each row: try each column. Check no queen in same col, diag, anti-diag.","If valid: place queen, recurse to next row.","If all rows filled → add solution. Backtrack."],
+time:"O(n!)",space:"O(n)",
+python:`def solveNQueens(n):
+    cols=set(); diag=set(); antiDiag=set()
+    res=[]; board=[['.']*n for _ in range(n)]
+    def dfs(r):
+        if r==n: res.append([''.join(row) for row in board]); return
+        for c in range(n):
+            if c in cols or (r-c) in diag or (r+c) in antiDiag: continue
+            cols.add(c);diag.add(r-c);antiDiag.add(r+c);board[r][c]='Q'
+            dfs(r+1)
+            cols.remove(c);diag.remove(r-c);antiDiag.remove(r+c);board[r][c]='.'
+    dfs(0); return res`,
+java:`List<List<String>> res=new ArrayList<>();
+public List<List<String>> solveNQueens(int n){
+    boolean[]col=new boolean[n],d1=new boolean[2*n],d2=new boolean[2*n];
+    char[][]board=new char[n][n];
+    for(char[]row:board)Arrays.fill(row,'.');
+    dfs(0,n,board,col,d1,d2);return res;
+}
+void dfs(int r,int n,char[][]b,boolean[]col,boolean[]d1,boolean[]d2){
+    if(r==n){List<String>l=new ArrayList<>();for(char[]row:b)l.add(new String(row));res.add(l);return;}
+    for(int c=0;c<n;c++){
+        if(col[c]||d1[r-c+n]||d2[r+c])continue;
+        col[c]=d1[r-c+n]=d2[r+c]=true;b[r][c]='Q';
+        dfs(r+1,n,b,col,d1,d2);
+        col[c]=d1[r-c+n]=d2[r+c]=false;b[r][c]='.';
+    }
+}`,
+cpp:`vector<vector<string>> solveNQueens(int n) {
+    vector<vector<string>> res;
+    vector<string> board(n,string(n,'.'));
+    vector<bool> col(n),d1(2*n),d2(2*n);
+    function<void(int)> dfs=[&](int r){
+        if(r==n){res.push_back(board);return;}
+        for(int c=0;c<n;c++){
+            if(col[c]||d1[r-c+n]||d2[r+c])continue;
+            col[c]=d1[r-c+n]=d2[r+c]=true;board[r][c]='Q';
+            dfs(r+1);
+            col[c]=d1[r-c+n]=d2[r+c]=false;board[r][c]='.';
+        }
+    };
+    dfs(0);return res;
+}`},
+ 
+{id:140,lc:295,level:"hard",title:"Find Median from Data Stream",tags:["Design","Heap"],lcSlug:"find-median-from-data-stream",
+approach:"Max-heap (lower half) + min-heap (upper half). Keep balanced.",
+steps:["Add to maxHeap. Move top to minHeap (balance upper).","If minHeap bigger → move its top to maxHeap.","Median: if equal sizes → avg of tops. Else → maxHeap.top."],
+time:"O(log n) add, O(1) median",space:"O(n)",
+python:`import heapq
+class MedianFinder:
+    def __init__(self): self.lo,self.hi=[],[]  # maxHeap(neg), minHeap
+    def addNum(self,n):
+        heapq.heappush(self.lo,-n)
+        heapq.heappush(self.hi,-heapq.heappop(self.lo))
+        if len(self.hi)>len(self.lo): heapq.heappush(self.lo,-heapq.heappop(self.hi))
+    def findMedian(self):
+        if len(self.lo)>len(self.hi): return -self.lo[0]
+        return (-self.lo[0]+self.hi[0])/2`,
+java:`class MedianFinder {
+    PriorityQueue<Integer> lo=new PriorityQueue<>(Collections.reverseOrder()),hi=new PriorityQueue<>();
+    public void addNum(int n){
+        lo.add(n); hi.add(lo.poll());
+        if(hi.size()>lo.size()) lo.add(hi.poll());
+    }
+    public double findMedian(){
+        return lo.size()>hi.size()?lo.peek():(lo.peek()+hi.peek())/2.0;
+    }
+}`,
+cpp:`class MedianFinder {
+    priority_queue<int> lo;
+    priority_queue<int,vector<int>,greater<int>> hi;
+public:
+    void addNum(int n){lo.push(n);hi.push(lo.top());lo.pop();if(hi.size()>lo.size()){lo.push(hi.top());hi.pop();}}
+    double findMedian(){return lo.size()>hi.size()?lo.top():(lo.top()+hi.top())/2.0;}
+};`},
+];
+ 
+// Fill remaining slots with representative problems
+const extra = [
+{id:36,lc:67,level:"easy",title:"Add Binary",tags:["String","Math"],lcSlug:"add-binary",approach:"Add bit by bit from right with carry.",steps:["i=len(a)-1, j=len(b)-1, carry=0.","While i>=0 or j>=0 or carry: digit=(a[i]+b[j]+carry). carry=digit//2, res=str(digit%2)+res.","Return res."],time:"O(max(m,n))",space:"O(max(m,n))",python:`def addBinary(a,b):\n    i,j,c,res=len(a)-1,len(b)-1,0,""\n    while i>=0 or j>=0 or c:\n        d=(int(a[i]) if i>=0 else 0)+(int(b[j]) if j>=0 else 0)+c\n        res=str(d%2)+res; c=d//2; i-=1;j-=1\n    return res`,java:`public String addBinary(String a,String b){\n    int i=a.length()-1,j=b.length()-1,c=0;\n    StringBuilder sb=new StringBuilder();\n    while(i>=0||j>=0||c>0){\n        int d=(i>=0?a.charAt(i--)-'0':0)+(j>=0?b.charAt(j--)-'0':0)+c;\n        sb.insert(0,d%2);c=d/2;\n    }\n    return sb.toString();\n}`,cpp:`string addBinary(string a,string b){\n    int i=a.size()-1,j=b.size()-1,c=0;\n    string res="";\n    while(i>=0||j>=0||c){\n        int d=(i>=0?a[i--]-'0':0)+(j>=0?b[j--]-'0':0)+c;\n        res=char('0'+d%2)+res;c=d/2;\n    }\n    return res;\n}`},
+{id:37,lc:118,level:"easy",title:"Pascal's Triangle Row",tags:["Array"],lcSlug:"pascals-triangle-ii",approach:"Build single row using O(k) space.",steps:["Start with row=[1].","For i=1 to rowIndex: update from right: row[j]+=row[j-1].","Return row."],time:"O(k²)",space:"O(k)",python:`def getRow(n):\n    row=[1]*(n+1)\n    for i in range(1,n):\n        for j in range(i,0,-1): row[j]+=row[j-1]\n    return row`,java:`public List<Integer> getRow(int n){\n    List<Integer> r=new ArrayList<>();\n    for(int i=0;i<=n;i++){r.add(1);for(int j=i-1;j>0;j--)r.set(j,r.get(j)+r.get(j-1));}\n    return r;\n}`,cpp:`vector<int> getRow(int n){\n    vector<int> r(n+1,1);\n    for(int i=1;i<n;i++) for(int j=i;j>0;j--) r[j]+=r[j-1];\n    return r;\n}`},
+{id:38,lc:160,level:"easy",title:"Intersection of Two Linked Lists",tags:["Linked List","Two Pointer"],lcSlug:"intersection-of-two-linked-lists",approach:"Two pointers switch lists at end — they meet at intersection.",steps:["a=headA, b=headB.","While a!=b: a=a.next (or headB), b=b.next (or headA).","Return a (or null)."],time:"O(m+n)",space:"O(1)",python:`def getIntersectionNode(headA, headB):\n    a,b=headA,headB\n    while a!=b:\n        a=a.next if a else headB\n        b=b.next if b else headA\n    return a`,java:`public ListNode getIntersectionNode(ListNode a,ListNode b){\n    ListNode pa=a,pb=b;\n    while(pa!=pb){pa=pa==null?b:pa.next;pb=pb==null?a:pb.next;}\n    return pa;\n}`,cpp:`ListNode* getIntersectionNode(ListNode* a,ListNode* b){\n    ListNode* pa=a,*pb=b;\n    while(pa!=pb){pa=pa?pa->next:b;pb=pb?pb->next:a;}\n    return pa;\n}`},
+];
+ 
+Q.push(...extra);
+ 
+// Medium extras
+const medExtra = [
+{id:111,lc:33,level:"medium",title:"Search in Rotated Sorted Array",tags:["Array","Binary Search"],lcSlug:"search-in-rotated-sorted-array",approach:"Determine which half is sorted, decide where target lies.",steps:["lo=0,hi=n-1.","If left half sorted (nums[lo]<=nums[mid]): if target in range→hi=mid-1 else lo=mid+1.","Else right half sorted: similar check."],time:"O(log n)",space:"O(1)",python:`def search(nums,target):\n    lo,hi=0,len(nums)-1\n    while lo<=hi:\n        mid=(lo+hi)//2\n        if nums[mid]==target: return mid\n        if nums[lo]<=nums[mid]:\n            if nums[lo]<=target<nums[mid]: hi=mid-1\n            else: lo=mid+1\n        else:\n            if nums[mid]<target<=nums[hi]: lo=mid+1\n            else: hi=mid-1\n    return -1`,java:`public int search(int[]nums,int target){\n    int lo=0,hi=nums.length-1;\n    while(lo<=hi){int mid=(lo+hi)/2;if(nums[mid]==target)return mid;\n    if(nums[lo]<=nums[mid]){if(nums[lo]<=target&&target<nums[mid])hi=mid-1;else lo=mid+1;}\n    else{if(nums[mid]<target&&target<=nums[hi])lo=mid+1;else hi=mid-1;}}\n    return -1;\n}`,cpp:`int search(vector<int>&nums,int target){\n    int lo=0,hi=nums.size()-1;\n    while(lo<=hi){int mid=(lo+hi)/2;if(nums[mid]==target)return mid;\n    if(nums[lo]<=nums[mid]){if(nums[lo]<=target&&target<nums[mid])hi=mid-1;else lo=mid+1;}\n    else{if(nums[mid]<target&&target<=nums[hi])lo=mid+1;else hi=mid-1;}}\n    return -1;\n}`},
+{id:112,lc:146,level:"medium",title:"LRU Cache",tags:["Design","HashMap","Linked List"],lcSlug:"lru-cache",approach:"HashMap + doubly linked list: O(1) get and put.",steps:["HashMap maps key→node in DLL.","get: move node to front. put: add to front.","If over capacity: evict from back."],time:"O(1)",space:"O(capacity)",python:`class LRUCache:\n    def __init__(self,cap):\n        self.cap=cap; self.cache={}\n        self.head=Node(0,0); self.tail=Node(0,0)\n        self.head.next=self.tail; self.tail.prev=self.head\n    # Full implementation needs Node class with prev/next\n    # remove(node), add_front(node) helpers`,java:`// Use LinkedHashMap for clean O(1) LRU:\nclass LRUCache extends LinkedHashMap<Integer,Integer>{\n    int cap;\n    LRUCache(int c){super(c,0.75f,true);cap=c;}\n    public int get(int k){return super.getOrDefault(k,-1);}\n    public void put(int k,int v){super.put(k,v);}\n    protected boolean removeEldestEntry(Map.Entry e){return size()>cap;}\n}`,cpp:`class LRUCache{\n    int cap; list<pair<int,int>> dl;\n    unordered_map<int,list<pair<int,int>>::iterator> mp;\npublic:\n    LRUCache(int c):cap(c){}\n    int get(int k){if(!mp.count(k))return -1;dl.splice(dl.begin(),dl,mp[k]);return mp[k]->second;}\n    void put(int k,int v){if(mp.count(k))dl.erase(mp[k]);dl.push_front({k,v});mp[k]=dl.begin();if(dl.size()>cap){mp.erase(dl.back().first);dl.pop_back();}}\n};`},
+];
+Q.push(...medExtra);
+ 
+// Hard extras
+const hardExtra=[
+{id:141,lc:32,level:"hard",title:"Longest Valid Parentheses",tags:["String","Stack","DP"],lcSlug:"longest-valid-parentheses",approach:"Stack stores indices; length = current index - stack top.",steps:["Push -1 as base.","For '(': push index. For ')': pop. If stack empty→push i. Else→maxLen=i-stack.top.","Track maximum."],time:"O(n)",space:"O(n)",python:`def longestValidParentheses(s):\n    stack,mx=[-1],0\n    for i,c in enumerate(s):\n        if c=='(': stack.append(i)\n        else:\n            stack.pop()\n            if not stack: stack.append(i)\n            else: mx=max(mx,i-stack[-1])\n    return mx`,java:`public int longestValidParentheses(String s){\n    Deque<Integer>st=new ArrayDeque<>();st.push(-1);int mx=0;\n    for(int i=0;i<s.length();i++){\n        if(s.charAt(i)=='(')st.push(i);\n        else{st.pop();if(st.isEmpty())st.push(i);else mx=Math.max(mx,i-st.peek());}\n    }\n    return mx;\n}`,cpp:`int longestValidParentheses(string s){\n    stack<int>st;st.push(-1);int mx=0;\n    for(int i=0;i<s.size();i++){\n        if(s[i]=='(')st.push(i);\n        else{st.pop();if(st.empty())st.push(i);else mx=max(mx,i-st.top());}\n    }\n    return mx;\n}`},
+{id:142,lc:72,level:"hard",title:"Edit Distance",tags:["String","DP"],lcSlug:"edit-distance",approach:"dp[i][j] = min ops to convert word1[0..i] to word2[0..j].",steps:["Base: dp[i][0]=i, dp[0][j]=j.","If chars equal: dp[i][j]=dp[i-1][j-1].","Else: dp[i][j]=1+min(dp[i-1][j],dp[i][j-1],dp[i-1][j-1])."],time:"O(m×n)",space:"O(m×n)",python:`def minDistance(w1,w2):\n    m,n=len(w1),len(w2)\n    dp=[[0]*(n+1) for _ in range(m+1)]\n    for i in range(m+1): dp[i][0]=i\n    for j in range(n+1): dp[0][j]=j\n    for i in range(1,m+1):\n        for j in range(1,n+1):\n            if w1[i-1]==w2[j-1]: dp[i][j]=dp[i-1][j-1]\n            else: dp[i][j]=1+min(dp[i-1][j],dp[i][j-1],dp[i-1][j-1])\n    return dp[m][n]`,java:`public int minDistance(String w1,String w2){\n    int m=w1.length(),n=w2.length();\n    int[][]dp=new int[m+1][n+1];\n    for(int i=0;i<=m;i++)dp[i][0]=i;\n    for(int j=0;j<=n;j++)dp[0][j]=j;\n    for(int i=1;i<=m;i++) for(int j=1;j<=n;j++)\n        dp[i][j]=w1.charAt(i-1)==w2.charAt(j-1)?dp[i-1][j-1]:1+Math.min(dp[i-1][j-1],Math.min(dp[i-1][j],dp[i][j-1]));\n    return dp[m][n];\n}`,cpp:`int minDistance(string w1,string w2){\n    int m=w1.size(),n=w2.size();\n    vector<vector<int>>dp(m+1,vector<int>(n+1));\n    for(int i=0;i<=m;i++)dp[i][0]=i;\n    for(int j=0;j<=n;j++)dp[0][j]=j;\n    for(int i=1;i<=m;i++) for(int j=1;j<=n;j++)\n        dp[i][j]=w1[i-1]==w2[j-1]?dp[i-1][j-1]:1+min({dp[i-1][j-1],dp[i-1][j],dp[i][j-1]});\n    return dp[m][n];\n}`},
+];
+Q.push(...hardExtra);
+ 
+// ─── State ────────────────────────────────────────────────────────────────────
+let solved = JSON.parse(localStorage.getItem('dsa2_solved')||'{}');
+let activeLang = 'python';
+let activeFilter = 'all';
+let searchQuery = '';
+ 
+function countSolved(lv){ return Q.filter(q=>q.level===lv&&solved[q.id]).length; }
+function updateProgress(){
+  const tot=Object.keys(solved).filter(k=>solved[k]).length;
+  document.getElementById('progTxt').textContent=`${tot} / ${Q.length}`;
+  document.getElementById('progFill').style.width=`${(tot/Q.length)*100}%`;
+  document.getElementById('sE').textContent=countSolved('easy');
+  document.getElementById('sM').textContent=countSolved('medium');
+  document.getElementById('sH').textContent=countSolved('hard');
+}
+ 
+function buildCard(q){
+  const s=solved[q.id];
+  const d=document.createElement('div');
+  d.className=`card ${q.level} ${s?'solved':''}`;
+  d.dataset.id=q.id; d.dataset.lv=q.level;
+ 
+  const stepsHtml=q.steps.map((t,i)=>`<li data-n="${i+1}">${t}</li>`).join('');
+  const code=q[activeLang]||(q.python||'// See other language tabs');
+ 
+  d.innerHTML=`
+    <div class="card-top">
+      <div class="card-row1">
+        <span class="lc-num">LC #${q.lc}</span>
+        <span class="card-title">${q.title}</span>
+        <span class="card-check">${s?'✓':''}</span>
+      </div>
+      <div class="card-row2">
+        ${q.tags.map(t=>`<span class="tag">${t}</span>`).join('')}
+        <a class="lc-link" href="https://leetcode.com/problems/${q.lcSlug}/" target="_blank" onclick="event.stopPropagation()">
+          LeetCode ↗
+        </a>
+      </div>
+    </div>
+    <div class="card-panel">
+      <div class="panel-inner">
+        <div class="tabs">
+          <button class="tab active" onclick="switchTab(event,'logic',${q.id})">💡 Logic</button>
+          <button class="tab" onclick="switchTab(event,'code',${q.id})">{'</>'} Code</button>
+        </div>
+        <div class="tab-content active" id="logic-${q.id}">
+          <div class="approach-box">${q.approach}</div>
+          <div class="step-label">Step-by-Step Thinking</div>
+          <ol class="steps">${stepsHtml}</ol>
+          <div class="cx-row">
+            <span class="cx"><b>Time:</b> ${q.time}</span>
+            <span class="cx"><b>Space:</b> ${q.space}</span>
+          </div>
+        </div>
+        <div class="tab-content" id="code-${q.id}">
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-lang">${activeLang}</span>
+              <button class="copy-btn" onclick="copyCode(event,${q.id})">Copy</button>
+            </div>
+            <pre id="pre-${q.id}">${escHtml(code)}</pre>
+          </div>
+        </div>
+        <button class="solve-btn" onclick="toggleSolved(event,${q.id})">
+          ${s?'✅ Solved! Click to undo':'Mark as Solved ✓'}
+        </button>
+      </div>
+    </div>`;
+ 
+  d.querySelector('.card-top').addEventListener('click', ()=>d.classList.toggle('open'));
+  return d;
+}
+ 
+function escHtml(t){ return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+ 
+function switchTab(e,tab,id){
+  e.stopPropagation();
+  const panel=e.target.closest('.panel-inner');
+  panel.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  panel.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  e.target.classList.add('active');
+  document.getElementById(`${tab}-${id}`).classList.add('active');
+}
+ 
+function copyCode(e,id){
+  e.stopPropagation();
+  const q=Q.find(x=>x.id===id);
+  const code=q[activeLang]||q.python||'';
+  navigator.clipboard.writeText(code).then(()=>{
+    e.target.textContent='Copied!';
+    setTimeout(()=>e.target.textContent='Copy',1500);
+  });
+}
+ 
+function toggleSolved(e,id){
+  e.stopPropagation();
+  solved[id]=!solved[id];
+  localStorage.setItem('dsa2_solved',JSON.stringify(solved));
+  render(); updateProgress();
+}
+ 
+function render(){
+  const container=document.getElementById('container');
+  container.innerHTML='';
+  const levels=[
+    {key:'easy',label:'🟢 Easy — 100 Problems',badge:'easy'},
+    {key:'medium',label:'🟡 Medium — 30 Problems',badge:'medium'},
+    {key:'hard',label:'🔴 Hard — 30 Problems',badge:'hard'},
+  ];
+  levels.forEach(({key,label,badge})=>{
+    if(activeFilter!=='all'&&activeFilter!==key) return;
+    const filtered=Q.filter(q=>{
+      if(q.level!==key) return false;
+      if(searchQuery){
+        const lcNum=`${q.lc}`;
+        return q.title.toLowerCase().includes(searchQuery)||lcNum.includes(searchQuery)||q.tags.some(t=>t.toLowerCase().includes(searchQuery));
+      }
+      return true;
+    });
+    if(!filtered.length) return;
+    const sec=document.createElement('div');
+    sec.className='section';
+    sec.innerHTML=`<div class="section-head"><span class="section-title">${label}</span><span class="sec-badge ${badge}">${filtered.length} problems</span></div><div class="grid" id="g-${key}"></div>`;
+    container.appendChild(sec);
+    const grid=sec.querySelector(`#g-${key}`);
+    filtered.forEach(q=>grid.appendChild(buildCard(q)));
+  });
+}
+ 
+// Controls
+document.querySelectorAll('.filter-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.filter-btn').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active'); activeFilter=b.dataset.f; render();
+  });
+});
+ 
+document.querySelectorAll('.lang-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.lang-btn').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active'); activeLang=b.dataset.lang; render();
+  });
+});
+ 
+document.getElementById('srch').addEventListener('input',e=>{
+  searchQuery=e.target.value.toLowerCase().trim(); render();
+});
+ 
+render(); updateProgress();
+</script>
+</body>
+</html>
